@@ -57,6 +57,9 @@ from model          import (train_all_models, predict_yield, load_meta, is_train
                              mark_training_done, get_retrain_status)
 
 from weather_api    import fetch_weather, fetch_weather_for_area, weather_code_text, detect_user_location
+from ai_engine      import (get_engine, ai_detect_disease, ai_analyze_image,
+                             ai_soil_interpretation, ai_smart_recommendations, ai_chat,
+                             PROVIDERS)
 
 # ── Heavy modules: lazy-loaded per-page for faster startup ──
 # image_analyzer, soil_analyzer, recommendation_engine, disease_detector,
@@ -997,6 +1000,8 @@ NAV_ITEMS = [
 
     ("🗄️", "Data Explorer",  "🗄️ Data Explorer"),
 
+    ("🤖", "AI Chat",        "🤖 AI Chat"),
+
 ]
 
 def set_page(p):
@@ -1111,11 +1116,58 @@ with st.sidebar:
 
         f"💻 {'Same PC ✅' if _rs['same_machine'] else 'Different PC ⚠️'}</div>"
 
-        "<div style='border-bottom:1px solid rgba(46,125,80,0.3);margin:10px 0;'></div>"
+        "<div style='border-bottom:1px solid rgba(46,125,80,0.3);margin:10px 0;'></div>",
+
+        unsafe_allow_html=True,
+
+    )
+
+    # ── 🔑 AI Provider API Keys ──
+    with st.expander("🔑 AI API Keys", expanded=False):
+        st.markdown(
+            "<span style='font-size:0.72rem;color:#90A4AE;'>"
+            "Add keys to enable AI features (disease detection, chatbot, smart recommendations). "
+            "Free providers tried first.</span>",
+            unsafe_allow_html=True,
+        )
+        _ai_engine = get_engine()
+        _provider_labels = {
+            "gemini": ("🟢 Gemini (Free)", "Get free key at ai.google.dev"),
+            "groq":   ("🟢 Groq (Free)",   "Get free key at console.groq.com"),
+            "claude":  ("🔵 Claude",        "Anthropic API key"),
+            "openai":  ("🟣 OpenAI",        "OpenAI API key"),
+            "xai":     ("⚫ Grok/xAI",      "xAI API key"),
+        }
+        for pid, (label, hint) in _provider_labels.items():
+            _skey = f"_ai_key_{pid}"
+            _existing = _ai_engine._keys.get(pid, "")
+            val = st.text_input(label, value=_existing, type="password",
+                                placeholder=hint, key=_skey)
+            if val and val != _existing:
+                _ai_engine.set_key(pid, val)
+            elif not val and _existing:
+                _ai_engine.remove_key(pid)
+
+        _avail = _ai_engine.get_available_providers()
+        if _avail:
+            names = [PROVIDERS[p]["name"] for p in _avail]
+            st.markdown(
+                f"<div style='font-size:0.7rem;color:#81c784;margin-top:4px;'>"
+                f"✅ Active: {', '.join(names)}</div>",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                "<div style='font-size:0.7rem;color:#FF9800;margin-top:4px;'>"
+                "⚠️ No AI keys configured — AI features disabled</div>",
+                unsafe_allow_html=True,
+            )
+
+    st.markdown(
 
         "<div style='font-size:0.68rem;color:#4caf50;text-align:center;padding-top:4px;'>"
 
-        "Smart Crop Yield AI v4.1 ML-Trained<br>Semester Project · Auto-Retrain Enabled</div>",
+        "Smart Crop Yield AI v4.2 AI-Enhanced<br>Semester Project · Auto-Retrain Enabled</div>",
 
         unsafe_allow_html=True,
 
@@ -1769,6 +1821,33 @@ elif page == "🔮 Predict Yield":
         except Exception:
             st.info("💡 Detailed soil analysis available for: Wheat, Rice, Maize, Cotton, Sugarcane.")
 
+        # ── 🧠 AI Soil Interpretation ──
+        _ai_soil_avail = len(get_engine().get_available_providers()) > 0
+        if _ai_soil_avail:
+            st.markdown("---")
+            st.markdown("#### 🧠 AI Soil Interpretation")
+            with st.spinner("AI is interpreting your soil data…"):
+                _soil_input = {
+                    "nitrogen": nitrogen, "phosphorus": phosphorus,
+                    "potassium": potassium, "ph": ph,
+                    "organic_carbon": 2.5, "soil_type": soil, "crop": crop,
+                    "overall_score": soil_result.get("overall_score", "N/A") if 'soil_result' in locals() else "N/A",
+                    "deficiencies": soil_result.get("deficiencies", []) if 'soil_result' in locals() else [],
+                }
+                _ai_soil_text = ai_soil_interpretation(_soil_input)
+            if _ai_soil_text:
+                st.markdown(
+                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
+                    f"Powered by {get_engine().last_provider or 'AI'}</div>",
+                    unsafe_allow_html=True
+                )
+                st.markdown(
+                    f"<div style='background:rgba(0,150,136,0.06);border:1px solid rgba(0,150,136,0.2);"
+                    f"border-radius:12px;padding:16px 20px;color:#e0e0e0;'>"
+                    f"{_ai_soil_text}</div>",
+                    unsafe_allow_html=True
+                )
+
         # ── 🌾 Crop Suitability Ranking ──
         st.markdown("---")
         st.markdown("#### 🌾 Crop Suitability for Your Soil")
@@ -1839,6 +1918,32 @@ elif page == "🔮 Predict Yield":
                         st.markdown(r)
         except Exception:
             pass
+
+        # ── 🧠 AI-Enhanced Recommendations ──
+        _ai_available_pred = len(get_engine().get_available_providers()) > 0
+        if _ai_available_pred:
+            st.markdown("---")
+            st.markdown("#### 🧠 AI-Enhanced Recommendations")
+            with st.spinner("Generating AI-powered recommendations…"):
+                _soil_d = {"nitrogen": nitrogen, "phosphorus": phosphorus,
+                           "potassium": potassium, "ph": ph, "soil_type": soil}
+                _wx_d = {"temperature": temp, "humidity": hum, "precipitation": rain}
+                _ai_recs_text = ai_smart_recommendations(
+                    crop=crop, soil_data=_soil_d,
+                    weather_data=_wx_d, yield_prediction=result
+                )
+            if _ai_recs_text:
+                st.markdown(
+                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
+                    f"Powered by {get_engine().last_provider or 'AI'}</div>",
+                    unsafe_allow_html=True
+                )
+                st.markdown(
+                    f"<div style='background:rgba(0,150,136,0.06);border:1px solid rgba(0,150,136,0.2);"
+                    f"border-radius:12px;padding:16px 20px;color:#e0e0e0;'>"
+                    f"{_ai_recs_text}</div>",
+                    unsafe_allow_html=True
+                )
 
         # ── Yield Category Badge ──
         try:
@@ -2792,6 +2897,111 @@ elif page == "📷 Image Scanner":
                 except Exception as e:
                     st.warning(f"Disease detection encountered an issue: {e}")
 
+        # ── 🧠 AI Vision Analysis (from ai_engine) ──
+        _ai_available = len(get_engine().get_available_providers()) > 0
+        if _ai_available:
+            st.markdown("---")
+            st.markdown("#### 🧠 AI Vision Analysis")
+            st.markdown(
+                "<div style='background:rgba(0,150,136,0.08);border:1px solid rgba(0,150,136,0.3);"
+                "border-radius:12px;padding:12px 16px;margin-bottom:12px;'>"
+                "<span style='color:#80CBC4;font-size:0.88rem;'>"
+                "Analyzing image with AI vision model…</span></div>",
+                unsafe_allow_html=True
+            )
+            with st.spinner("AI is analyzing your image…"):
+                # AI Disease Detection
+                _ai_crop_hint = result.get("top_crop", None)
+                _ai_dd = ai_detect_disease(img_for_analysis, crop=_ai_crop_hint)
+                # AI Image Analysis
+                _ai_img = ai_analyze_image(img_for_analysis)
+
+            if _ai_dd.get("ai_provider"):
+                st.markdown("##### 🔬 AI Disease Detection")
+                st.markdown(
+                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
+                    f"Powered by {_ai_dd['ai_provider']}</div>",
+                    unsafe_allow_html=True
+                )
+                _ai_d = _ai_dd.get("disease", "Unknown")
+                _ai_c = _ai_dd.get("confidence", 0)
+                _ai_s = _ai_dd.get("severity", "N/A")
+                _ai_color = "#4CAF50" if _ai_d == "Healthy" else "#f44336" if _ai_s in ("Critical","High") else "#FF9800" if _ai_s == "Moderate" else "#8BC34A"
+                st.markdown(
+                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:18px;text-align:center;'>"
+                    f"<div style='font-size:1.4rem;font-weight:800;color:{_ai_color};'>{_ai_d}</div>"
+                    f"<div style='font-size:0.85rem;color:#b0bec5;margin-top:4px;'>"
+                    f"Confidence: {_ai_c:.0%} | Severity: {_ai_s}</div></div>",
+                    unsafe_allow_html=True
+                )
+                _ai_desc = _ai_dd.get("description", "")
+                if _ai_desc:
+                    st.markdown(f"<div style='color:#e0e0e0;margin:8px 0;'>{_ai_desc}</div>", unsafe_allow_html=True)
+                _ai_symptoms = _ai_dd.get("symptoms", [])
+                if _ai_symptoms:
+                    st.markdown("**Observed Symptoms:**")
+                    for sym in _ai_symptoms:
+                        st.markdown(f"- {sym}")
+                _ai_recs = _ai_dd.get("recommendations", [])
+                if _ai_recs:
+                    st.markdown("**🩺 AI Treatment Recommendations:**")
+                    for rec in _ai_recs:
+                        st.markdown(
+                            f"<div style='background:rgba(0,150,136,0.06);border-left:3px solid #26A69A;"
+                            f"border-radius:8px;padding:10px 14px;margin:5px 0;color:#e0e0e0;'>{rec}</div>",
+                            unsafe_allow_html=True
+                        )
+
+            if _ai_img.get("ai_provider"):
+                st.markdown("##### 🌿 AI Field Assessment")
+                st.markdown(
+                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
+                    f"Powered by {_ai_img['ai_provider']}</div>",
+                    unsafe_allow_html=True
+                )
+                _ai_hs = _ai_img.get("health_score", "?")
+                _ai_hl = _ai_img.get("health_label", "")
+                _ai_yp = _ai_img.get("yield_potential", "?")
+                _ai_ir = _ai_img.get("irrigation_status", "?")
+                ai_c1, ai_c2, ai_c3 = st.columns(3)
+                with ai_c1:
+                    _hs_color = "#4CAF50" if isinstance(_ai_hs, (int,float)) and _ai_hs >= 70 else "#FF9800" if isinstance(_ai_hs, (int,float)) and _ai_hs >= 40 else "#f44336"
+                    st.markdown(
+                        f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;'>"
+                        f"<div style='font-size:2rem;font-weight:800;color:{_hs_color};'>{_ai_hs}</div>"
+                        f"<div style='font-size:0.85rem;color:#b0bec5;'>{_ai_hl}</div>"
+                        f"<div style='font-size:0.75rem;color:#78909C;'>Health Score</div></div>",
+                        unsafe_allow_html=True
+                    )
+                with ai_c2:
+                    st.markdown(
+                        f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;'>"
+                        f"<div style='font-size:1.3rem;font-weight:700;color:#8BC34A;'>{_ai_yp}</div>"
+                        f"<div style='font-size:0.75rem;color:#78909C;margin-top:4px;'>Yield Potential</div></div>",
+                        unsafe_allow_html=True
+                    )
+                with ai_c3:
+                    st.markdown(
+                        f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;'>"
+                        f"<div style='font-size:1.3rem;font-weight:700;color:#29B6F6;'>{_ai_ir}</div>"
+                        f"<div style='font-size:0.75rem;color:#78909C;margin-top:4px;'>Irrigation</div></div>",
+                        unsafe_allow_html=True
+                    )
+                _ai_obs = _ai_img.get("observations", [])
+                if _ai_obs:
+                    st.markdown("**🔍 AI Observations:**")
+                    for ob in _ai_obs:
+                        st.markdown(f"<div style='color:#A5D6A7;margin:3px 0;'>🌱 {ob}</div>", unsafe_allow_html=True)
+                _ai_field_recs = _ai_img.get("recommendations", [])
+                if _ai_field_recs:
+                    st.markdown("**💡 AI Recommendations:**")
+                    for rec in _ai_field_recs:
+                        st.markdown(
+                            f"<div style='background:rgba(0,150,136,0.06);border-left:3px solid #26A69A;"
+                            f"border-radius:8px;padding:10px 14px;margin:5px 0;color:#e0e0e0;'>{rec}</div>",
+                            unsafe_allow_html=True
+                        )
+
         # ── Auto yield prediction from scan ──
 
         if st.session_state.meta is not None:
@@ -3694,3 +3904,94 @@ elif page == "🗄️ Data Explorer":
         fig2.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
 
         st.plotly_chart(fig2, width='stretch')
+
+# ╔══════════════════════════════════════════════════════════════════════════╗ #
+# ║  PAGE 7 – AI CHAT                                                        ║ #
+# ╚══════════════════════════════════════════════════════════════════════════╝ #
+
+elif page == "🤖 AI Chat":
+
+    st.markdown("<div class='section-header'>🤖 AgriBot — AI Farming Assistant</div>",
+                unsafe_allow_html=True)
+
+    _ai_engine_chat = get_engine()
+    _chat_providers = _ai_engine_chat.get_available_providers()
+
+    if not _chat_providers:
+        st.warning(
+            "⚠️ **No AI API keys configured.** "
+            "Please add at least one API key in the sidebar (🔑 AI API Keys) to use the chatbot.\n\n"
+            "**Free options:**\n"
+            "- 🟢 **Gemini** — Get a free key at [ai.google.dev](https://ai.google.dev)\n"
+            "- 🟢 **Groq** — Get a free key at [console.groq.com](https://console.groq.com)"
+        )
+        st.stop()
+
+    # Show active provider
+    _active_names = [PROVIDERS[p]["name"] for p in _chat_providers]
+    st.markdown(
+        f"<div style='font-size:0.78rem;color:#80CBC4;margin-bottom:16px;'>"
+        f"🟢 AI Connected: {_active_names[0]} "
+        f"({'+ ' + str(len(_active_names)-1) + ' fallback(s)' if len(_active_names) > 1 else 'no fallback'})"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+
+    # Initialize chat history
+    if "ai_chat_history" not in st.session_state:
+        st.session_state.ai_chat_history = []
+
+    # Quick-start topic buttons
+    st.markdown("<div style='margin-bottom:12px;'>", unsafe_allow_html=True)
+    _topics = [
+        ("🌾 Crop Rotation", "What is a good crop rotation plan for rice and wheat in North India?"),
+        ("🐛 Pest Control", "What are common pests for tomato crops and how to control them organically?"),
+        ("💧 Irrigation", "How to decide the right irrigation schedule for sugarcane?"),
+        ("🧪 Soil Health", "How can I improve soil fertility naturally for my farm?"),
+        ("🏛️ Govt Schemes", "What government schemes are available for farmers in India?"),
+        ("🌿 Organic", "How do I start organic farming? What are the first steps?"),
+    ]
+    topic_cols = st.columns(3)
+    for i, (label, question) in enumerate(_topics):
+        with topic_cols[i % 3]:
+            if st.button(label, key=f"topic_{i}", use_container_width=True):
+                st.session_state.ai_chat_history.append({"role": "user", "content": question})
+                with st.spinner("AgriBot is thinking…"):
+                    resp = ai_chat(question, st.session_state.ai_chat_history[:-1])
+                st.session_state.ai_chat_history.append({"role": "assistant", "content": resp})
+                st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    # Display chat history
+    for msg in st.session_state.ai_chat_history:
+        if msg["role"] == "user":
+            st.markdown(
+                f"<div style='background:rgba(33,150,243,0.1);border:1px solid rgba(33,150,243,0.25);"
+                f"border-radius:12px;padding:12px 16px;margin:8px 0;'>"
+                f"<b style='color:#64B5F6;'>🧑‍🌾 You:</b><br>"
+                f"<span style='color:#e0e0e0;'>{msg['content']}</span></div>",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f"<div style='background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.25);"
+                f"border-radius:12px;padding:12px 16px;margin:8px 0;'>"
+                f"<b style='color:#81C784;'>🤖 AgriBot:</b><br>"
+                f"<span style='color:#e0e0e0;'>{msg['content']}</span></div>",
+                unsafe_allow_html=True,
+            )
+
+    # Chat input
+    user_input = st.chat_input("Ask AgriBot anything about farming…")
+    if user_input:
+        st.session_state.ai_chat_history.append({"role": "user", "content": user_input})
+        with st.spinner("AgriBot is thinking…"):
+            response = ai_chat(user_input, st.session_state.ai_chat_history[:-1])
+        st.session_state.ai_chat_history.append({"role": "assistant", "content": response})
+        st.rerun()
+
+    # Clear chat button
+    if st.session_state.ai_chat_history:
+        if st.button("🗑️ Clear Chat", key="clear_chat"):
+            st.session_state.ai_chat_history = []
+            st.rerun()
