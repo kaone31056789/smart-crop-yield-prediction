@@ -1,0 +1,34 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Saved ML models (large binary files)
+saved_models/*.pkl
+saved_models/*.joblib
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Temporary/utility scripts
+take_screenshots.py
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
