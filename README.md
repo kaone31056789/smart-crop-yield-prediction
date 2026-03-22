@@ -239,6 +239,7 @@ This project is licensed under the MIT License.
 ## 👤 Author
 
 **Parikshit** — B.Tech Semester 4 Mini Project
+**Dhruv Gouniyal** — B.Tech Semester 4 Mini Project
 
 ---
 
