@@ -101,36 +101,36 @@ def _get_theme_css(theme="light"):
 
     # ── Theme variable values ──
     vars_light = """
-        --bg-primary: #F8F6F0;
+        --bg-primary: #F5F3ED;
         --bg-card: #FFFFFF;
-        --bg-sidebar: linear-gradient(180deg, #F1EDE4 0%, #EAE5DA 100%);
-        --bg-sidebar-border: #E0DDD5;
+        --bg-sidebar: linear-gradient(180deg, #E8E3D8 0%, #DED8CC 100%);
+        --bg-sidebar-border: #C8C3B8;
         --bg-input: #FFFFFF;
-        --text-primary: #1B4332;
-        --text-body: #344E41;
-        --text-muted: #6B7F6F;
-        --text-sidebar: #344E41;
-        --border-card: #E8E5DD;
-        --border-input: #E0DDD5;
-        --border-section: #E8E5DD;
+        --text-primary: #0D2818;
+        --text-body: #1A2E23;
+        --text-muted: #4A6355;
+        --text-sidebar: #1B4332;
+        --border-card: #D4D0C8;
+        --border-input: #C8C3B8;
+        --border-section: #D4D0C8;
         --accent: #2D6A4F;
-        --accent-light: #52B788;
-        --accent-lighter: #95D5B2;
-        --accent-bg: rgba(45, 106, 79, 0.08);
-        --accent-hover: rgba(45, 106, 79, 0.12);
-        --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-        --card-hover-shadow: 0 12px 40px rgba(45, 106, 79, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+        --accent-light: #40916C;
+        --accent-lighter: #74C99B;
+        --accent-bg: rgba(45, 106, 79, 0.10);
+        --accent-hover: rgba(45, 106, 79, 0.15);
+        --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+        --card-hover-shadow: 0 12px 40px rgba(45, 106, 79, 0.15), 0 4px 12px rgba(0, 0, 0, 0.06);
         --btn-bg: #2D6A4F;
         --btn-hover: #1B4332;
         --btn-text: #FFFFFF;
-        --btn-shadow: 0 2px 8px rgba(45, 106, 79, 0.2);
-        --weather-inline-bg: #F0F8F4;
-        --weather-inline-border: #B7D7C8;
+        --btn-shadow: 0 2px 8px rgba(45, 106, 79, 0.25);
+        --weather-inline-bg: #EAF4EF;
+        --weather-inline-border: #A3CCBA;
         --gradient-subtle-1: rgba(82, 183, 136, 0.06);
         --gradient-subtle-2: rgba(212, 163, 115, 0.06);
-        --scrollbar-track: #F1EDE4;
-        --scrollbar-thumb: #C5C0B6;
-        --progress-track: #E8E5DD;
+        --scrollbar-track: #E8E3D8;
+        --scrollbar-thumb: #B0A99D;
+        --progress-track: #D4D0C8;
         --expander-bg: #FFFFFF;
     """
 
@@ -544,6 +544,12 @@ def _get_theme_css(theme="light"):
     box-shadow: none !important;
     transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
     letter-spacing: 0.2px;
+}}
+
+[data-testid="stSidebar"] div.stButton > button p,
+[data-testid="stSidebar"] div.stButton > button span,
+[data-testid="stSidebar"] div.stButton > button div {{
+    color: inherit !important;
 }}
 
 [data-testid="stSidebar"] div.stButton > button:hover {{
