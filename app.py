@@ -102,65 +102,42 @@ def _app_css():
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 /* ══════════════════════════════════════════════════════════════════
-
-   ROOT – Dark Cyber-Agriculture (Out of this World)
-
+   ROOT – Light Agriculture & Forestry Theme (Apple-inspired)
    ══════════════════════════════════════════════════════════════════ */
 
-@keyframes cyberFloat {
-    0%   { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
-    50%  { opacity: 0.8; }
-    100% { transform: translateY(-100px) rotate(45deg); opacity: 0.1; }
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes holographicPulse {
-    0%   { opacity: 0.8; filter: drop-shadow(0 0 2px #00E676); }
-    50%  { opacity: 1; filter: drop-shadow(0 0 10px #00E5FF); }
-    100% { opacity: 0.8; filter: drop-shadow(0 0 2px #00E676); }
+@keyframes gentlePulse {
+    0%   { box-shadow: 0 4px 24px rgba(45, 106, 79, 0.10); }
+    50%  { box-shadow: 0 4px 32px rgba(45, 106, 79, 0.18); }
+    100% { box-shadow: 0 4px 24px rgba(45, 106, 79, 0.10); }
 }
 
-@keyframes nebulaDrift {
-    0% { background-position: 0% 0%; }
-    50% { background-position: 100% 100%; }
-    100% { background-position: 0% 0%; }
+@keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes floatLeaf {
+    0%   { transform: translateY(0) rotate(0deg); }
+    50%  { transform: translateY(-6px) rotate(2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
 }
 
 [data-testid="stAppViewContainer"] {
-
-    font-family: 'Rajdhani', sans-serif;
-
-    color: #E0F2F1; /* Ice white / pale teal for text */
-
-    background:
-
-        /* ── Deep Space Nebula Base ── */
-        radial-gradient(ellipse at 10% 20%, rgba(26, 8, 38, 0.8) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 80%, rgba(4, 26, 30, 0.8) 0%, transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(0, 30, 20, 0.6) 0%, transparent 60%),
-        
-        /* ── Cyber Grid ── */
-        linear-gradient(rgba(0, 230, 118, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 230, 118, 0.03) 1px, transparent 1px),
-
-        /* ── Void Black Floor ── */
-        linear-gradient(180deg,
-            #02040A 0%,      /* Deep void black */
-            #050A14 40%,     /* Extremely dark blue/cyan */
-            #030F12 80%,     /* Dark teal space */
-            #00150F 100%     /* Deep dark green underbelly */
-        );
-        
-    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px, 100% 100%;
-    animation: nebulaDrift 60s ease infinite;
-
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: #344E41;
+    background: #F8F6F0;
     background-attachment: fixed;
-
 }
 
-/* ── Floating Digital Spores (Cyber Particles) ── */
+/* Subtle grain texture overlay */
 [data-testid="stAppViewContainer"]::before {
     content: "";
     position: fixed;
@@ -168,677 +145,515 @@ def _app_css():
     pointer-events: none;
     z-index: 0;
     background:
-        radial-gradient(1.5px 1.5px at 20% 80%, #00E676, transparent),
-        radial-gradient(2px 2px at 60% 40%, #00E5FF, transparent),
-        radial-gradient(1px 1px at 80% 90%, #B388FF, transparent),
-        radial-gradient(2.5px 2.5px at 30% 20%, #64FFDA, transparent),
-        radial-gradient(1px 1px at 10% 10%, #00E676, transparent),
-        radial-gradient(2px 2px at 90% 30%, #00E5FF, transparent),
-        radial-gradient(1.5px 1.5px at 50% 70%, #64FFDA, transparent);
-    animation: cyberFloat 15s linear infinite;
-    opacity: 0.6;
+        radial-gradient(ellipse at 20% 0%, rgba(82, 183, 136, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 100%, rgba(212, 163, 115, 0.06) 0%, transparent 50%);
+    opacity: 1;
 }
 
-/* ── Holographic Base Glow at Bottom ── */
-
+/* Remove bottom glow */
 [data-testid="stAppViewContainer"]::after {
-
-    content: "";
-
-    position: fixed;
-
-    bottom: 0; left: 0; right: 0;
-
-    height: 100px;
-
-    pointer-events: none;
-
-    z-index: 0;
-
-    background:
-        linear-gradient(0deg, rgba(0, 230, 118, 0.15) 0%, rgba(0, 229, 255, 0.05) 50%, transparent 100%);
-
-    border-top: 1px solid rgba(0, 230, 118, 0.3);
-    box-shadow: 0 -5px 20px rgba(0, 230, 118, 0.2);
-
-    animation: holographicPulse 4s ease-in-out infinite alternate;
-
+    display: none;
 }
 
-/* ── Sidebar – Dark Glass Terminal ── */
-
+/* ── Sidebar – Clean Light Panel ── */
 [data-testid="stSidebar"] {
-
-    background:
-
-        linear-gradient(180deg, rgba(5, 10, 20, 0.85) 0%, rgba(2, 5, 10, 0.95) 100%);
-
-    border-right: 1px solid rgba(0, 229, 255, 0.3);
-
-    box-shadow: 5px 0 25px rgba(0, 229, 255, 0.1);
-
-    backdrop-filter: blur(15px);
-
+    background: linear-gradient(180deg, #F1EDE4 0%, #EAE5DA 100%);
+    border-right: 1px solid #E0DDD5;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
 }
 
-[data-testid="stSidebar"] * { color: #84FFFF !important; }
+[data-testid="stSidebar"] * { color: #344E41 !important; }
 
 /* ══════════════════════════════════════════════════════════════════
-
-   HERO BANNER – Holographic Control Deck
-
+   HERO BANNER – Nature Gradient
    ══════════════════════════════════════════════════════════════════ */
-
 .hero {
-
-    background:
-
-        linear-gradient(135deg, rgba(0, 20, 20, 0.6), rgba(5, 10, 25, 0.8));
-
-    border: 1px solid rgba(0, 230, 118, 0.5);
-
-    border-radius: 12px;
-
-    padding: 36px 40px;
-
-    margin-bottom: 28px;
-
-    backdrop-filter: blur(20px);
-
-    box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.8),
-        inset 0 0 20px rgba(0, 230, 118, 0.1),
-        0 0 10px rgba(0, 230, 118, 0.2);
-
+    background: linear-gradient(135deg, #2D6A4F 0%, #40916C 50%, #52B788 100%);
+    border: none;
+    border-radius: 20px;
+    padding: 48px 44px;
+    margin-bottom: 32px;
+    box-shadow: 0 8px 32px rgba(45, 106, 79, 0.20), 0 2px 8px rgba(0, 0, 0, 0.06);
     position: relative;
-
     overflow: hidden;
-
+    animation: fadeInUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
-/* Futuristic Scanline over Hero */
 .hero::after {
     content: "";
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
     pointer-events: none;
-    background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(0, 230, 118, 0.05) 2px,
-        rgba(0, 230, 118, 0.05) 4px
-    );
-    opacity: 0.5;
 }
 
 .hero::before {
-
-    content: "⚡🧬🛰️🌌";
-
+    content: "🌾🌿🌱☀️";
     position: absolute;
-
-    top: 20px; right: 20px;
-
-    font-size: 2.5rem;
-
+    top: 20px; right: 24px;
+    font-size: 2rem;
     opacity: 0.3;
-
-    letter-spacing: 5px;
-    filter: drop-shadow(0 0 10px #00E5FF);
-
+    letter-spacing: 8px;
+    animation: floatLeaf 4s ease-in-out infinite;
 }
 
 .hero h1 {
-
-    margin: 0; font-size: 3rem; font-weight: 900; font-family: 'Orbitron', sans-serif;
-
-    background: linear-gradient(90deg, #00E676, #00E5FF, #B388FF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
-
+    margin: 0;
+    font-size: 2.6rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
 }
 
 .hero p {
-
-    margin: 10px 0 0; font-size: 1.2rem; color: #B2DFDB;
-
-    font-weight: 500;
-    letter-spacing: 1px;
-
+    margin: 12px 0 0;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 400;
+    letter-spacing: 0.2px;
+    line-height: 1.6;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-
-   CARDS – Holographic Dark Glass
-
+   CARDS – Clean White with Soft Shadows
    ══════════════════════════════════════════════════════════════════ */
-
 .card {
-
-    background: rgba(10, 15, 25, 0.6);
-
-    border: 1px solid rgba(0, 229, 255, 0.3);
-
-    border-radius: 12px;
-
+    background: #FFFFFF;
+    border: 1px solid #E8E5DD;
+    border-radius: 16px;
     padding: 24px;
-
     margin-bottom: 20px;
-
-    backdrop-filter: blur(12px);
-
-    box-shadow:
-
-        0 10px 30px rgba(0, 0, 0, 0.8),
-        inset 0 0 15px rgba(0, 229, 255, 0.05);
-
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation: fadeInUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+    color: #344E41;
 }
 
 .card:hover {
-
-    transform: translateY(-5px);
-    border-color: rgba(0, 230, 118, 0.8);
-
-    box-shadow:
-
-        0 15px 40px rgba(0, 0, 0, 0.9),
-        0 0 20px rgba(0, 230, 118, 0.3),
-        inset 0 0 20px rgba(0, 230, 118, 0.1);
-
+    transform: translateY(-4px);
+    border-color: #B7D7C8;
+    box-shadow: 0 12px 40px rgba(45, 106, 79, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .metric-card {
-
-    background: linear-gradient(145deg, rgba(5, 20, 25, 0.8) 0%, rgba(2, 10, 15, 0.9) 100%);
-
-    border: 1px solid rgba(0, 230, 118, 0.4);
-
-    border-radius: 12px;
-
-    padding: 22px 18px;
-
+    background: #FFFFFF;
+    border: 1px solid #E8E5DD;
+    border-radius: 16px;
+    padding: 24px 20px;
     text-align: center;
-    
-    box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(0, 230, 118, 0.1);
-
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
-
+    animation: fadeInUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
 .metric-card::after {
-    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, #00E676, transparent);
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(90deg, #2D6A4F, #52B788, #95D5B2);
+    border-radius: 16px 16px 0 0;
 }
 
-.metric-card:hover { 
-    transform: translateY(-8px) scale(1.02); 
-    border-color: #00E5FF;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.9), 0 0 25px rgba(0, 229, 255, 0.3), inset 0 0 15px rgba(0, 229, 255, 0.1);
+.metric-card:hover {
+    transform: translateY(-6px) scale(1.02);
+    border-color: #95D5B2;
+    box-shadow: 0 16px 48px rgba(45, 106, 79, 0.14), 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.metric-value { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 700; color: #FFFFFF; letter-spacing: 2px; text-shadow: 0 0 15px #00E676, 0 0 5px #00E676; }
+.metric-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1B4332;
+    letter-spacing: -0.5px;
+}
 
-.metric-label { font-size: 0.9rem; color: #1DE9B6; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px;}
+.metric-label {
+    font-size: 0.82rem;
+    color: #6B7F6F;
+    margin-top: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
 
-/* ── Big result box – Reactor Core ── */
-
-@keyframes reactorPulse {
-    0% { box-shadow: 0 0 30px rgba(0, 230, 118, 0.2), inset 0 0 20px rgba(0, 230, 118, 0.1); border-color: rgba(0, 230, 118, 0.5); }
-    100% { box-shadow: 0 0 60px rgba(0, 230, 118, 0.5), inset 0 0 40px rgba(0, 230, 118, 0.3); border-color: rgba(0, 230, 118, 1); }
+/* ── Big result box – Nature Core ── */
+@keyframes resultGlow {
+    0%   { box-shadow: 0 8px 32px rgba(45, 106, 79, 0.15); }
+    100% { box-shadow: 0 12px 48px rgba(45, 106, 79, 0.25); }
 }
 
 .result-box {
-
-    background:
-
-        radial-gradient(circle at 50% 50%, rgba(0, 230, 118, 0.1) 0%, transparent 70%),
-
-        linear-gradient(135deg, #02100A, #010508);
-
-    border-radius: 16px;
-
-    padding: 45px;
-
+    background: linear-gradient(135deg, #2D6A4F, #40916C);
+    border-radius: 20px;
+    padding: 48px;
     text-align: center;
-
-    border: 2px solid #00E676;
-
-    animation: reactorPulse 2s ease-in-out infinite alternate;
+    border: none;
+    animation: resultGlow 3s ease-in-out infinite alternate;
     position: relative;
+    overflow: hidden;
 }
 
 .result-box::before {
-    content: '[ SYS.YIELD_CALC // OPTIMAL ]';
-    position: absolute; top: 10px; left: 15px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: #00E676; letter-spacing: 2px; opacity: 0.7;
+    content: '🌾 Predicted Yield';
+    position: absolute;
+    top: 14px; left: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.result-box::after {
+    content: "";
+    position: absolute;
+    top: -50%; right: -30%;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
 }
 
 .result-value {
-
-    font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; 
-    
+    font-family: 'DM Sans', sans-serif;
+    font-size: 4rem;
+    font-weight: 800;
     color: #FFFFFF;
-    text-shadow: 0 0 20px #00E676, 0 0 40px #00E676, 0 0 10px #FFFFFF;
-    letter-spacing: 2px;
+    letter-spacing: -1px;
 }
 
-.result-label { font-size: 1.2rem; color: #64FFDA; margin-top: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 5px;}
+.result-label {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
 
-/* ── Model card – Data Node ── */
-
+/* ── Model card ── */
 .model-card {
-
-    background: rgba(15, 10, 25, 0.6);
-
-    border: 1px solid rgba(179, 136, 255, 0.4);
-
-    border-left: 4px solid #B388FF;
-
-    border-radius: 8px;
-
+    background: #FFFFFF;
+    border: 1px solid #E8E5DD;
+    border-left: 4px solid #52B788;
+    border-radius: 12px;
     padding: 18px 20px;
-
     margin-bottom: 12px;
-
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-
-    transition: all 0.3s ease;
-
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    color: #344E41;
 }
 
 .model-card:hover {
-
-    border-color: #D500F9;
-    border-left-color: #D500F9;
-
-    transform: translateX(10px);
-
-    background: rgba(25, 10, 40, 0.8);
-
-    box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px rgba(213, 0, 249, 0.3);
-
+    border-color: #2D6A4F;
+    border-left-color: #2D6A4F;
+    transform: translateX(6px);
+    background: #F8FBF8;
+    box-shadow: 0 8px 24px rgba(45, 106, 79, 0.10);
 }
 
-/* ── Weather card – Atmospheric Scanner ── */
-
+/* ── Weather card ── */
 .weather-card {
-
-    background:
-
-        linear-gradient(135deg, rgba(2, 20, 30, 0.8), rgba(0, 10, 20, 0.9));
-
-    border: 1px solid rgba(0, 229, 255, 0.4);
-
-    border-radius: 12px;
-
+    background: #FFFFFF;
+    border: 1px solid #E8E5DD;
+    border-radius: 16px;
     padding: 24px;
-
     text-align: center;
-
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 229, 255, 0.1);
-
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.weather-value { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 700; color: #FFFFFF; text-shadow: 0 0 15px #00E5FF; }
+.weather-card:hover {
+    box-shadow: 0 12px 36px rgba(45, 106, 79, 0.10);
+    transform: translateY(-4px);
+}
 
-.weather-label { font-size: 0.9rem; color: #84FFFF; margin-top: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;}
+.weather-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1B4332;
+}
+
+.weather-label {
+    font-size: 0.85rem;
+    color: #6B7F6F;
+    margin-top: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
 
 /* ── Image scan card ── */
-
 .scan-card {
-
-    background: linear-gradient(135deg, rgba(20, 5, 30, 0.8), rgba(10, 2, 20, 0.9));
-
-    border: 1px solid rgba(213, 0, 249, 0.5);
-
-    border-radius: 12px;
-
+    background: #FFFFFF;
+    border: 1px solid #E8E5DD;
+    border-radius: 16px;
     padding: 24px;
-
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(213, 0, 249, 0.1);
-
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    color: #344E41;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-
-   SECTION HEADERS – Cyber typography
-
+   SECTION HEADERS – Clean Modern Typography
    ══════════════════════════════════════════════════════════════════ */
-
 .section-header {
-
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.6rem; font-weight: 700; color: #FFFFFF;
-
-    padding-bottom: 12px;
-
-    border-bottom: 1px solid rgba(0, 229, 255, 0.3);
-
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1B4332;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #E8E5DD;
     margin-bottom: 28px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    letter-spacing: -0.3px;
     position: relative;
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-
+    animation: fadeInUp 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) both;
 }
 
 .section-header::after {
-
     content: "";
-
-    position: absolute; bottom: -1px; left: 0; width: 100px; height: 2px;
-
-    background: #00E5FF;
-    box-shadow: 0 0 10px #00E5FF;
-
+    position: absolute;
+    bottom: -2px; left: 0;
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, #2D6A4F, #52B788);
+    border-radius: 2px;
 }
 
 .sub-header {
-
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem; font-weight: 600; color: #00E676; margin-bottom: 16px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2D6A4F;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-
-   BUTTONS – UI Controls (Angular, Glowing)
-
+   BUTTONS – Clean Solid Green (Apple-style)
    ══════════════════════════════════════════════════════════════════ */
-
 [data-testid="stAppViewContainer"] div.stButton > button {
-
-    background: rgba(0, 230, 118, 0.1) !important;
-
-    color: #00E676 !important;
-
-    border: 1px solid #00E676 !important;
-
-    border-radius: 4px; /* Sharp corners */
-
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 700;
-
+    background: #2D6A4F !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
     padding: 12px 28px;
-
-    font-size: 1rem;
-
+    font-size: 0.95rem;
     width: 100%;
-
-    text-transform: uppercase;
-    letter-spacing: 2px;
-
-    box-shadow: 0 0 10px rgba(0, 230, 118, 0.2), inset 0 0 10px rgba(0, 230, 118, 0.1);
-
-    transition: all 0.2s ease;
-
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(45, 106, 79, 0.2);
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 [data-testid="stAppViewContainer"] div.stButton > button:hover {
-
-    background: rgba(0, 230, 118, 0.2) !important;
-
+    background: #1B4332 !important;
     color: #FFFFFF !important;
-
-    border-color: #FFFFFF !important;
-
     transform: translateY(-2px);
-
-    box-shadow: 0 0 20px rgba(0, 230, 118, 0.6), inset 0 0 20px rgba(0, 230, 118, 0.3);
-
+    box-shadow: 0 6px 20px rgba(45, 106, 79, 0.3);
 }
 
 [data-testid="stAppViewContainer"] div.stButton > button:active {
-
-    transform: translateY(1px);
-
-    box-shadow: 0 0 5px rgba(0, 230, 118, 0.5);
-
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(45, 106, 79, 0.2);
 }
 
 /* ── Sidebar buttons ── */
-
 [data-testid="stSidebar"] div.stButton > button {
-
     background: transparent !important;
-
-    border: 1px solid transparent !important;
-    border-left: 2px solid rgba(0, 229, 255, 0.3) !important;
-
-    border-radius: 0 !important;
-
-    color: #84FFFF !important;
-
-    font-weight: 600 !important;
-
-    font-size: 1rem !important;
-
-    padding: 10px 15px !important;
-
+    border: none !important;
+    border-left: 3px solid transparent !important;
+    border-radius: 0 10px 10px 0 !important;
+    color: #344E41 !important;
+    font-weight: 500 !important;
+    font-size: 0.95rem !important;
+    padding: 10px 16px !important;
     text-align: left !important;
-
-    margin-bottom: 8px !important;
-
+    margin-bottom: 4px !important;
     box-shadow: none !important;
-
-    transition: all 0.2s ease !important;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    letter-spacing: 0.2px;
 }
 
 [data-testid="stSidebar"] div.stButton > button:hover {
-
-    background: linear-gradient(90deg, rgba(0, 229, 255, 0.1), transparent) !important;
-
-    color: #FFFFFF !important;
-    border-left: 2px solid #00E5FF !important;
-    
-    transform: translateX(5px) !important;
-    text-shadow: 0 0 8px #00E5FF;
+    background: rgba(45, 106, 79, 0.08) !important;
+    color: #1B4332 !important;
+    border-left: 3px solid #52B788 !important;
+    transform: translateX(4px) !important;
 }
 
 /* ── Active nav (primary) ── */
-
 [data-testid="stSidebar"] div.stButton > button[kind="primary"],
-
 [data-testid="stSidebar"] div.stButton > button[data-testid="stBaseButton-primary"] {
-
-    background: linear-gradient(90deg, rgba(0, 230, 118, 0.2), transparent) !important;
-
-    border: 1px solid rgba(0, 230, 118, 0.3) !important;
-    border-left: 4px solid #00E676 !important;
-
-    color: #FFFFFF !important;
-
+    background: linear-gradient(90deg, rgba(45, 106, 79, 0.12), rgba(45, 106, 79, 0.04)) !important;
+    border: none !important;
+    border-left: 3px solid #2D6A4F !important;
+    color: #1B4332 !important;
     font-weight: 700 !important;
-    
-    box-shadow: inset 10px 0 20px rgba(0, 230, 118, 0.1) !important;
-    text-shadow: 0 0 10px #00E676 !important;
-
 }
 
 [data-testid="stSidebar"] div.stButton > button[kind="primary"]:hover,
-
 [data-testid="stSidebar"] div.stButton > button[data-testid="stBaseButton-primary"]:hover {
-
-    background: linear-gradient(90deg, rgba(0, 230, 118, 0.3), transparent) !important;
-
-    transform: translateX(5px) !important;
-    border-color: #00E676 !important;
-
+    background: linear-gradient(90deg, rgba(45, 106, 79, 0.18), rgba(45, 106, 79, 0.06)) !important;
+    transform: translateX(4px) !important;
 }
 
 /* ── Retrain button ── */
-
 [data-testid="stSidebar"] button[key*="retrain"] {
-
-    background: rgba(213, 0, 249, 0.1) !important;
-
-    border: 1px solid #D500F9 !important;
-    border-left: 4px solid #D500F9 !important;
-
-    color: #E040FB !important;
-
-    box-shadow: 0 0 15px rgba(213, 0, 249, 0.2) !important;
-    
-    border-radius: 0 !important;
-
+    background: rgba(212, 163, 115, 0.12) !important;
+    border: 1px solid #D4A373 !important;
+    border-left: 3px solid #D4A373 !important;
+    color: #8B6914 !important;
+    border-radius: 0 10px 10px 0 !important;
 }
 [data-testid="stSidebar"] button[key*="retrain"]:hover {
-    box-shadow: 0 0 25px rgba(213, 0, 249, 0.5) !important;
-    background: rgba(213, 0, 249, 0.2) !important;
-    color: #FFF !important;
+    background: rgba(212, 163, 115, 0.2) !important;
+    color: #6B4F1D !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-
-   FORM ELEMENTS – Data input fields
-
+   FORM ELEMENTS – Light & Clean
    ══════════════════════════════════════════════════════════════════ */
-
 div[data-baseweb="select"] > div,
-
 div[data-baseweb="input"] > div,
-
 textarea {
-
-    background: rgba(2, 8, 15, 0.8) !important;
-
-    border: 1px solid rgba(0, 229, 255, 0.3) !important;
-
-    color: #FFFFFF !important;
-
-    border-radius: 4px !important; 
-
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.8) !important;
-    
-    transition: all 0.2s ease !important;
-    font-family: 'Rajdhani', sans-serif !important;
-    font-size: 1.1rem !important;
-
+    background: #FFFFFF !important;
+    border: 1.5px solid #E0DDD5 !important;
+    color: #344E41 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.95rem !important;
 }
 
 div[data-baseweb="select"] > div:hover,
 div[data-baseweb="input"] > div:focus-within {
-    border-color: #00E5FF !important;
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2), inset 0 0 10px rgba(0,0,0,0.8) !important;
+    border-color: #52B788 !important;
+    box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.12), 0 1px 4px rgba(0, 0, 0, 0.04) !important;
 }
 
-label { color: #84FFFF !important; font-weight: 600 !important; letter-spacing: 1px; font-size: 0.95rem !important; text-transform: uppercase;}
+label {
+    color: #2D6A4F !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px;
+    font-size: 0.88rem !important;
+}
 
-/* ── Sliders – Neon Bar ── */
-
+/* ── Sliders ── */
 div[data-baseweb="slider"] div[role="slider"] {
-
-    background: #00E676 !important;
-
-    border: 2px solid #FFF !important;
-
-    box-shadow: 0 0 10px #00E676, 0 0 5px #FFF !important;
-    border-radius: 0 !important;
-
+    background: #2D6A4F !important;
+    border: 2px solid #FFFFFF !important;
+    box-shadow: 0 2px 8px rgba(45, 106, 79, 0.3) !important;
+    border-radius: 50% !important;
 }
 
 /* ── Tabs ── */
-
-.stTabs [data-baseweb="tab-list"] { gap: 10px; border-bottom: 1px solid rgba(0, 229, 255, 0.3); padding-bottom: 0px;}
+.stTabs [data-baseweb="tab-list"] {
+    gap: 4px;
+    border-bottom: 2px solid #E8E5DD;
+    padding-bottom: 0;
+}
 
 .stTabs [data-baseweb="tab"] {
-
     background: transparent;
-
-    border-radius: 4px 4px 0 0;
-
-    color: #00E5FF;
-    opacity: 0.6;
-
-    font-family: 'Orbitron', sans-serif;
+    border-radius: 10px 10px 0 0;
+    color: #6B7F6F;
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
-
-    padding: 12px 20px;
-    
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-
+    padding: 10px 20px;
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    font-size: 0.9rem;
 }
 
 .stTabs [data-baseweb="tab"]:hover {
-    color: #FFFFFF;
-    opacity: 1;
-    background: rgba(0, 229, 255, 0.1);
+    color: #2D6A4F;
+    background: rgba(45, 106, 79, 0.05);
 }
 
 .stTabs [aria-selected="true"] {
-
-    background: rgba(0, 229, 255, 0.15) !important;
-
-    color: #FFFFFF !important;
-    opacity: 1 !important;
-
-    border-bottom: 3px solid #00E5FF;
-    border-top: 1px solid rgba(0, 229, 255, 0.5);
-    border-left: 1px solid rgba(0, 229, 255, 0.5);
-    border-right: 1px solid rgba(0, 229, 255, 0.5);
-    
-    box-shadow: inset 0 10px 20px rgba(0, 229, 255, 0.1) !important;
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8) !important;
-
+    background: rgba(45, 106, 79, 0.08) !important;
+    color: #1B4332 !important;
+    border-bottom: 2px solid #2D6A4F;
+    border-radius: 10px 10px 0 0;
 }
 
 /* ── Progress Bar ── */
 [data-testid="stProgress"] > div > div > div {
-    background-color: rgba(0, 230, 118, 0.1) !important;
+    background-color: #E8E5DD !important;
+    border-radius: 10px !important;
 }
 [data-testid="stProgress"] > div > div > div > div {
-    background-color: #00E5FF !important;
-    box-shadow: 0 0 10px #00E5FF, 0 0 5px #00E676 !important;
+    background: linear-gradient(90deg, #2D6A4F, #52B788) !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-
    WEATHER DISPLAY – inline in predict form
-
    ══════════════════════════════════════════════════════════════════ */
-
 .weather-inline {
-
-    background: rgba(2, 10, 20, 0.8);
-
-    border: 1px solid rgba(0, 229, 255, 0.4);
-    border-left: 4px solid #00E5FF;
-
-    border-radius: 4px;
-
-    padding: 15px 20px;
-
+    background: #F0F8F4;
+    border: 1px solid #B7D7C8;
+    border-left: 4px solid #52B788;
+    border-radius: 12px;
+    padding: 16px 20px;
     margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #344E41;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
 
-    font-size: 1rem;
-    
-    font-weight: 600;
-    letter-spacing: 1px;
+/* ── Streamlit overrides for light theme ── */
+[data-testid="stAppViewContainer"] h1,
+[data-testid="stAppViewContainer"] h2,
+[data-testid="stAppViewContainer"] h3,
+[data-testid="stAppViewContainer"] h4 {
+    color: #1B4332 !important;
+    font-family: 'Inter', sans-serif !important;
+}
 
-    color: #B2DFDB;
+[data-testid="stAppViewContainer"] p,
+[data-testid="stAppViewContainer"] span,
+[data-testid="stAppViewContainer"] li,
+[data-testid="stAppViewContainer"] div {
+    color: #344E41;
+}
 
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+/* Expander styling */
+[data-testid="stExpander"] {
+    border: 1px solid #E8E5DD !important;
+    border-radius: 12px !important;
+    background: #FFFFFF !important;
+}
 
+/* Metric widget override */
+[data-testid="stMetric"] {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #E8E5DD;
 }
 
 /* ── Hide default branding ── */
-
 #MainMenu, footer, header { visibility: hidden; }
 html { scroll-behavior: smooth; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #F1EDE4; }
+::-webkit-scrollbar-thumb { background: #C5C0B6; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #A39E94; }
 
 </style>
 
@@ -903,9 +718,9 @@ if not st.session_state.initialized:
 
             "<div style='font-size:4rem;'>🌾</div>"
 
-            "<h1 style='color:#a5d6a7;margin:12px 0;'>Smart Crop Yield AI</h1>"
+            "<h1 style='color:#2D6A4F;margin:12px 0;font-family:Inter,sans-serif;'>Smart Crop Yield AI</h1>"
 
-            "<p style='color:#c5e1a5;font-size:1.05rem;'>Initializing — please wait…</p>"
+            "<p style='color:#6B7F6F;font-size:1.05rem;'>Initializing — please wait…</p>"
 
             "</div>", unsafe_allow_html=True
 
@@ -1037,13 +852,13 @@ with st.sidebar:
 
         "<span style='font-size:2rem;'>🌾</span><br>"
 
-        "<span style='font-size:1.15rem;font-weight:800;color:#a5d6a7;letter-spacing:0.5px;'>"
+        "<span style='font-size:1.15rem;font-weight:800;color:#2D6A4F;letter-spacing:0.5px;font-family:Inter,sans-serif;'>"
 
         "Smart Crop Yield AI</span>"
 
         "</div>"
 
-        "<div style='border-bottom:1px solid rgba(46,125,80,0.3);margin:4px 0 12px;'></div>",
+        "<div style='border-bottom:1px solid #E0DDD5;margin:4px 0 12px;'></div>",
 
         unsafe_allow_html=True,
 
@@ -1063,7 +878,7 @@ with st.sidebar:
 
                   on_click=set_page, args=(page_key,))
 
-    st.markdown("<div style='border-bottom:1px solid rgba(46,125,80,0.3);margin:8px 0 12px;'></div>",
+    st.markdown("<div style='border-bottom:1px solid #E0DDD5;margin:8px 0 12px;'></div>",
 
                 unsafe_allow_html=True)
 
@@ -1079,9 +894,9 @@ with st.sidebar:
 
         st.markdown(
 
-            f"<div style='font-size:0.72rem;color:#81c784;padding:4px 8px;"
+            f"<div style='font-size:0.72rem;color:#2D6A4F;padding:4px 8px;"
 
-            f"background:rgba(46,125,80,0.12);border-radius:8px;margin-bottom:8px;'>"
+            f"background:rgba(45,106,79,0.08);border-radius:8px;margin-bottom:8px;'>"
 
             f"{src_short}{yr}<br>"
 
@@ -1127,9 +942,9 @@ with st.sidebar:
 
     st.markdown(
 
-        f"<div style='font-size:0.68rem;color:#78909C;padding:4px 8px;"
+        f"<div style='font-size:0.68rem;color:#6B7F6F;padding:4px 8px;"
 
-        f"background:rgba(0,0,0,0.15);border-radius:6px;margin:6px 0;'>"
+        f"background:rgba(45,106,79,0.06);border-radius:8px;margin:6px 0;'>"
 
         f"🔄 Auto-retrain: <b>{_next_lbl}</b><br>"
 
@@ -1137,7 +952,7 @@ with st.sidebar:
 
         f"💻 {'Same PC ✅' if _rs['same_machine'] else 'Different PC ⚠️'}</div>"
 
-        "<div style='border-bottom:1px solid rgba(46,125,80,0.3);margin:10px 0;'></div>",
+        "<div style='border-bottom:1px solid #E0DDD5;margin:10px 0;'></div>",
 
         unsafe_allow_html=True,
 
@@ -1145,7 +960,7 @@ with st.sidebar:
 
     st.markdown(
 
-        "<div style='font-size:0.68rem;color:#4caf50;text-align:center;padding-top:4px;'>"
+        "<div style='font-size:0.68rem;color:#6B7F6F;text-align:center;padding-top:4px;'>"
 
         "Smart Crop Yield AI v4.1 ML-Trained<br>Semester Project · Auto-Retrain Enabled</div>",
 
@@ -1262,11 +1077,11 @@ if page == "🏠 Dashboard":
 
         st.markdown(
 
-            f"<div class='card' style='border-color:rgba(33,150,243,0.3);padding:14px 20px;'>"
+            f"<div class='card' style='border-color:#B7D7C8;padding:14px 20px;'>"
 
-            f"<span style='font-size:0.82rem;color:#90caf9;'>📂 <b>Data Source:</b> {info.get('source','')}</span><br>"
+            f"<span style='font-size:0.82rem;color:#2D6A4F;'>📂 <b>Data Source:</b> {info.get('source','')}</span><br>"
 
-            f"<span style='font-size:0.76rem;color:#81c784;'>"
+            f"<span style='font-size:0.76rem;color:#6B7F6F;'>"
 
             f"{info.get('n_records',0):,} records &nbsp;|&nbsp; "
 
@@ -1305,7 +1120,7 @@ if page == "🏠 Dashboard":
         avg_y = _df.groupby("Crop")["Yield_ton_per_ha"].mean().reset_index().sort_values("Yield_ton_per_ha")
         f1 = px.bar(avg_y, x="Yield_ton_per_ha", y="Crop", orientation="h",
                      color="Yield_ton_per_ha", color_continuous_scale="Greens",
-                     title="📊 Average Yield by Crop (t/ha)", template="plotly_dark")
+                     title="📊 Average Yield by Crop (t/ha)", template="plotly_white")
         f1.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                           coloraxis_showscale=False, showlegend=False)
 
@@ -1313,11 +1128,11 @@ if page == "🏠 Dashboard":
         cc.columns = ["Crop", "Count"]
         f2 = px.pie(cc, values="Count", names="Crop", title="🥧 Crop Distribution",
                       color_discrete_sequence=px.colors.sequential.Greens_r,
-                      template="plotly_dark")
+                      template="plotly_white")
         f2.update_layout(paper_bgcolor="rgba(0,0,0,0)")
 
         f3 = px.box(_df, x="Season", y="Yield_ton_per_ha", color="Season",
-                       title="📦 Yield by Season", template="plotly_dark",
+                       title="📦 Yield by Season", template="plotly_white",
                        color_discrete_sequence=px.colors.qualitative.Pastel)
         f3.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                            showlegend=False)
@@ -1325,14 +1140,14 @@ if page == "🏠 Dashboard":
         samp = _df.sample(min(1000, len(_df)), random_state=42)
         f4 = px.scatter(samp, x="Temperature", y="Yield_ton_per_ha",
                           color="Crop", opacity=0.55, title="🌡️ Temperature vs Yield",
-                          template="plotly_dark")
+                          template="plotly_white")
         f4.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
 
         num_cols = ["Nitrogen","Phosphorus","Potassium","pH","Temperature",
                     "Humidity","Rainfall","Fertilizer","Pesticide","Yield_ton_per_ha"]
         corr = _df[num_cols].corr()
         f5 = px.imshow(corr, text_auto=".2f", color_continuous_scale="RdYlGn",
-                         title="Correlation Heatmap", template="plotly_dark")
+                         title="Correlation Heatmap", template="plotly_white")
         f5.update_layout(paper_bgcolor="rgba(0,0,0,0)")
         return f1, f2, f3, f4, f5
 
@@ -1418,7 +1233,7 @@ elif page == "🔮 Predict Yield":
 
                 f"<b>{info.get('icon','')} {name}{badge}</b><br>"
 
-                f"<span style='font-size:0.75rem;color:#81c784;'>{info.get('family','')}</span><br>"
+                f"<span style='font-size:0.75rem;color:#40916C;'>{info.get('family','')}</span><br>"
 
                 f"<span style='font-size:0.8rem;'>R² = <b style='color:#8bc34a;'>{r2}</b></span>"
 
@@ -1740,7 +1555,7 @@ elif page == "🔮 Predict Yield":
 
                           color="Importance", color_continuous_scale="Greens",
 
-                          title=f"Feature Importance — {selected_model}", template="plotly_dark")
+                          title=f"Feature Importance — {selected_model}", template="plotly_white")
 
             fig2.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
 
@@ -1781,7 +1596,7 @@ elif page == "🔮 Predict Yield":
                 st.plotly_chart(fig_s, width='stretch')
             with sc2:
                 st.markdown(
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;margin-top:10px;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;margin-top:10px;'>"
                     f"<div style='font-size:1.3rem;font-weight:700;color:{soil_color};'>{soil_label}</div>"
                     f"<div style='color:#b0bec5;font-size:0.88rem;margin-top:8px;'>"
                     f"<b>Nitrogen:</b> {soil_result.get('nutrient_ratings',{}).get('Nitrogen (N)',{}).get('rating','—')}<br>"
@@ -1816,7 +1631,7 @@ elif page == "🔮 Predict Yield":
                     fig_s = px.bar(suit_df, x="score", y="crop", orientation="h",
                                      color="score", color_continuous_scale="YlGn",
                                      title="Top 5 Crops for Your Soil Conditions",
-                                     template="plotly_dark")
+                                     template="plotly_white")
                     fig_s.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                                            coloraxis_showscale=False, height=300)
                     st.plotly_chart(fig_s, width='stretch')
@@ -1838,7 +1653,7 @@ elif page == "🔮 Predict Yield":
                 for r in recs["crop_management"]:
                     st.markdown(
                         f"<div style='background:rgba(76,175,80,0.08);border-left:3px solid #4CAF50;"
-                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#e0e0e0;'>{r}</div>",
+                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#344E41;'>{r}</div>",
                         unsafe_allow_html=True
                     )
             if recs.get("soil_improvement"):
@@ -1846,7 +1661,7 @@ elif page == "🔮 Predict Yield":
                 for r in recs["soil_improvement"]:
                     st.markdown(
                         f"<div style='background:rgba(255,152,0,0.08);border-left:3px solid #FF9800;"
-                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#e0e0e0;'>{r}</div>",
+                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#344E41;'>{r}</div>",
                         unsafe_allow_html=True
                     )
             if recs.get("weather_advisory"):
@@ -1854,7 +1669,7 @@ elif page == "🔮 Predict Yield":
                 for r in recs["weather_advisory"]:
                     st.markdown(
                         f"<div style='background:rgba(33,150,243,0.08);border-left:3px solid #2196F3;"
-                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#e0e0e0;'>{r}</div>",
+                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#344E41;'>{r}</div>",
                         unsafe_allow_html=True
                     )
             if recs.get("yield_optimization"):
@@ -1862,7 +1677,7 @@ elif page == "🔮 Predict Yield":
                 for r in recs["yield_optimization"]:
                     st.markdown(
                         f"<div style='background:rgba(139,195,74,0.08);border-left:3px solid #8BC34A;"
-                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#e0e0e0;'>{r}</div>",
+                        f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#344E41;'>{r}</div>",
                         unsafe_allow_html=True
                     )
             if recs.get("online_insights"):
@@ -1967,7 +1782,7 @@ elif page == "📷 Image Scanner":
 
                     f"<div style='font-weight:700;color:#64B5F6;font-size:1rem;'>📍 Photo Location Detected</div>"
 
-                    f"<div style='color:#B0BEC5;font-size:0.88rem;margin-top:4px;'>"
+                    f"<div style='color:#6B7F6F;font-size:0.88rem;margin-top:4px;'>"
 
                     f"<b>Location:</b> {_gps.get('location_name', 'Unknown')}<br>"
 
@@ -2192,7 +2007,7 @@ elif page == "📷 Image Scanner":
 
                 f"{scene_labels2.get(scene, 'Scene Detected')}</div>"
 
-                f"<div style='font-size:0.88rem;color:#e0e0e0;'>"
+                f"<div style='font-size:0.88rem;color:#344E41;'>"
 
                 f"{tip}</div>"
 
@@ -2222,7 +2037,7 @@ elif page == "📷 Image Scanner":
 
                 st.markdown(
 
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;margin:12px 0;text-align:center;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;margin:12px 0;text-align:center;'>"
 
                     f"<div style='font-size:2.8rem;font-weight:800;color:{fert_color};'>{fert_score:.0f}/100</div>"
 
@@ -2312,7 +2127,7 @@ elif page == "📷 Image Scanner":
 
                 st.markdown(
 
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:18px;margin:12px 0;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:18px;margin:12px 0;'>"
 
                     f"<div style='font-size:1.6rem;font-weight:800;color:{s_color};text-align:center;'>"
 
@@ -2494,7 +2309,7 @@ elif page == "📷 Image Scanner":
 
                 st.markdown(
 
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;text-align:center;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;text-align:center;'>"
 
                     f"<div style='font-size:2.5rem;font-weight:800;color:{y_color};'>{yr:.0f}/100</div>"
 
@@ -2506,7 +2321,7 @@ elif page == "📷 Image Scanner":
 
                 st.markdown(
 
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;text-align:center;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;text-align:center;'>"
 
                     f"<div style='font-size:1.8rem;font-weight:800;color:#81D4FA;'>"
 
@@ -2544,7 +2359,7 @@ elif page == "📷 Image Scanner":
 
                     f"<div style='display:flex;align-items:center;margin:6px 0;'>"
 
-                    f"<div style='width:150px;font-weight:600;color:#e0e0e0;'>{factor['name']}</div>"
+                    f"<div style='width:150px;font-weight:600;color:#344E41;'>{factor['name']}</div>"
 
                     f"<div style='flex:1;background:rgba(255,255,255,0.1);border-radius:8px;height:22px;margin:0 10px;overflow:hidden;'>"
 
@@ -2577,7 +2392,7 @@ elif page == "📷 Image Scanner":
                 ds_icon = "🔴"
 
             st.markdown(
-                f"<div style='background:rgba(0,0,0,0.3);border-left:4px solid {ds_color};"
+                f"<div style='background:rgba(45,106,79,0.04);border-left:4px solid {ds_color};"
                 f"border-radius:12px;padding:18px;margin:10px 0;'>"
                 f"<div style='display:flex;align-items:center;gap:12px;'>"
                 f"<span style='font-size:2.2rem;'>{ds_icon}</span>"
@@ -2598,10 +2413,10 @@ elif page == "📷 Image Scanner":
                         f"<div style='background:rgba(0,0,0,0.2);border-radius:10px;padding:12px 16px;"
                         f"margin:6px 0;border-left:3px solid {sev_c};'>"
                         f"<div style='display:flex;justify-content:space-between;align-items:center;'>"
-                        f"<span style='font-weight:700;color:#e0e0e0;'>{iss.get('icon','')} {iss['name']}</span>"
+                        f"<span style='font-weight:700;color:#344E41;'>{iss.get('icon','')} {iss['name']}</span>"
                         f"<span style='background:{sev_c};color:#fff;padding:2px 10px;border-radius:8px;"
                         f"font-size:0.75rem;font-weight:700;text-transform:uppercase;'>{sev}</span></div>"
-                        f"<div style='color:#B0BEC5;font-size:0.85rem;margin-top:4px;'>{iss.get('detail','')}</div>"
+                        f"<div style='color:#6B7F6F;font-size:0.85rem;margin-top:4px;'>{iss.get('detail','')}</div>"
                         f"<div style='color:#90A4AE;font-size:0.82rem;margin-top:3px;'>"
                         f"<b>Likely causes:</b> {causes_text}</div></div>",
                         unsafe_allow_html=True)
@@ -2627,13 +2442,13 @@ elif page == "📷 Image Scanner":
             wc1, wc2 = st.columns(2)
             with wc1:
                 st.markdown(
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;text-align:center;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;text-align:center;'>"
                     f"<div style='font-size:2.4rem;font-weight:800;color:{urg_color};'>{wsi}/100</div>"
                     f"<div style='font-size:0.9rem;color:#b0bec5;'>Water Stress Index</div>"
                     f"</div>", unsafe_allow_html=True)
             with wc2:
                 st.markdown(
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;text-align:center;'>"
+                    f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;text-align:center;'>"
                     f"<div style='font-size:2rem;'>{urg_icon}</div>"
                     f"<div style='font-size:1.1rem;font-weight:700;color:{urg_color};'>{urgency}</div>"
                     f"</div>", unsafe_allow_html=True)
@@ -2680,7 +2495,7 @@ elif page == "📷 Image Scanner":
             active_diseases = pest_data.get("active_diseases", [])
 
             st.markdown(
-                f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;"
+                f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:16px;text-align:center;"
                 f"border:1px solid {p_color};margin-bottom:12px;'>"
                 f"<div style='font-size:1.3rem;font-weight:700;color:{p_color};'>{p_level}</div>"
                 f"<div style='font-size:0.85rem;color:#b0bec5;'>Current Season: {p_season} "
@@ -2705,7 +2520,7 @@ elif page == "📷 Image Scanner":
                         f"<span style='background:{sev_c};color:#fff;padding:2px 10px;border-radius:8px;"
                         f"font-size:0.72rem;font-weight:700;text-transform:uppercase;'>{t_type} — {sev}</span>"
                         f"</div>"
-                        f"<div style='color:#B0BEC5;font-size:0.82rem;margin-top:5px;'>"
+                        f"<div style='color:#6B7F6F;font-size:0.82rem;margin-top:5px;'>"
                         f"<b>Symptoms:</b> {threat.get('symptom', 'N/A')}</div>"
                         f"<div style='color:#81C784;font-size:0.82rem;margin-top:3px;'>"
                         f"<b>Control:</b> {threat.get('control', 'N/A')}</div>"
@@ -2731,7 +2546,7 @@ elif page == "📷 Image Scanner":
             wr_color = weed_data.get("risk_color", "#9E9E9E")
 
             st.markdown(
-                f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:18px;text-align:center;'>"
+                f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:18px;text-align:center;'>"
                 f"<div style='font-size:2.2rem;font-weight:800;color:{wr_color};'>{wr}/100</div>"
                 f"<div style='font-size:1rem;font-weight:600;color:{wr_color};'>{wr_label}</div>"
                 f"<div style='font-size:0.8rem;color:#90A4AE;margin-top:4px;'>Weed Presence Score</div>"
@@ -2789,7 +2604,7 @@ elif page == "📷 Image Scanner":
                     ddc1, ddc2 = st.columns(2)
                     with ddc1:
                         st.markdown(
-                            f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;text-align:center;'>"
+                            f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;text-align:center;'>"
                             f"<div style='font-size:2rem;'>{dd_icon}</div>"
                             f"<div style='font-size:1.4rem;font-weight:800;color:{dd_color};margin-top:8px;'>"
                             f"{dd_disease}</div>"
@@ -2806,7 +2621,7 @@ elif page == "📷 Image Scanner":
                             fig_dd = px.bar(prob_df, x="Probability", y="Disease", orientation="h",
                                            color="Probability", color_continuous_scale="RdYlGn_r",
                                            title="Disease Probability Distribution",
-                                           template="plotly_dark")
+                                           template="plotly_white")
                             fig_dd.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                                                  coloraxis_showscale=False, height=250,
                                                  margin=dict(t=40, b=10))
@@ -2818,7 +2633,7 @@ elif page == "📷 Image Scanner":
                         for rec in dd_recs:
                             st.markdown(
                                 f"<div style='background:rgba(156,39,176,0.06);border-left:3px solid #AB47BC;"
-                                f"border-radius:8px;padding:10px 14px;margin:5px 0;color:#e0e0e0;'>{rec}</div>",
+                                f"border-radius:8px;padding:10px 14px;margin:5px 0;color:#344E41;'>{rec}</div>",
                                 unsafe_allow_html=True
                             )
                 except Exception as e:
@@ -3164,7 +2979,7 @@ elif page == "🌦️ Weather Intel":
 
                      color="Suitability %", color_continuous_scale="YlGn",
 
-                     title="Top 10 Crops for Current Weather", template="plotly_dark")
+                     title="Top 10 Crops for Current Weather", template="plotly_white")
 
         fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
 
@@ -3189,7 +3004,7 @@ elif page == "🌦️ Weather Intel":
             # 1. Temperature comparison (sorted)
             fig_t = px.bar(all_df.sort_values("temperature"), x="State", y="temperature",
                            color="temperature", color_continuous_scale="RdYlBu_r",
-                           title="🌡️ Temperature Across States (°C)", template="plotly_dark")
+                           title="🌡️ Temperature Across States (°C)", template="plotly_white")
             fig_t.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                                 coloraxis_showscale=False)
             st.plotly_chart(fig_t, width='stretch')
@@ -3197,7 +3012,7 @@ elif page == "🌦️ Weather Intel":
             # 2. Humidity comparison
             fig_h = px.bar(all_df.sort_values("humidity"), x="State", y="humidity",
                            color="humidity", color_continuous_scale="Blues",
-                           title="💧 Humidity Across States (%)", template="plotly_dark")
+                           title="💧 Humidity Across States (%)", template="plotly_white")
             fig_h.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                                 coloraxis_showscale=False)
             st.plotly_chart(fig_h, width='stretch')
@@ -3207,7 +3022,7 @@ elif page == "🌦️ Weather Intel":
                 # 3. Rainfall comparison
                 fig_r = px.bar(all_df.sort_values("rainfall"), x="State", y="rainfall",
                                color="rainfall", color_continuous_scale="Teal",
-                               title="🌧️ Annual Rainfall (mm)", template="plotly_dark")
+                               title="🌧️ Annual Rainfall (mm)", template="plotly_white")
                 fig_r.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                                     coloraxis_showscale=False, height=380)
                 st.plotly_chart(fig_r, width='stretch')
@@ -3215,7 +3030,7 @@ elif page == "🌦️ Weather Intel":
                 # 4. Wind speed comparison
                 fig_w = px.bar(all_df.sort_values("wind_speed"), x="State", y="wind_speed",
                                color="wind_speed", color_continuous_scale="Purples",
-                               title="💨 Wind Speed (km/h)", template="plotly_dark")
+                               title="💨 Wind Speed (km/h)", template="plotly_white")
                 fig_w.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                                     coloraxis_showscale=False, height=380)
                 st.plotly_chart(fig_w, width='stretch')
@@ -3235,7 +3050,7 @@ elif page == "🌦️ Weather Intel":
                                   color="group", hover_name="State",
                                   color_discrete_map={"Hottest 5": "#ef5350", "Coldest 5": "#42a5f5"},
                                   title="Temperature vs Humidity (bubble size = rainfall)",
-                                  template="plotly_dark",
+                                  template="plotly_white",
                                   labels={"temperature": "Temperature (°C)", "humidity": "Humidity (%)"})
             fig_comp.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
             st.plotly_chart(fig_comp, width='stretch')
@@ -3251,7 +3066,7 @@ elif page == "🌦️ Weather Intel":
     st.markdown("#### 🛰️ Satellite NDVI — Vegetation Health Analysis")
     st.markdown(
         "<div class='card' style='border-color:rgba(76,175,80,0.3);'>"
-        "<span style='color:#81c784;font-size:0.88rem;'>"
+        "<span style='color:#40916C;font-size:0.88rem;'>"
         "Simulated NDVI (Normalized Difference Vegetation Index) analysis — "
         "in production this connects to Sentinel-2/Landsat satellite imagery.</span></div>",
         unsafe_allow_html=True
@@ -3290,7 +3105,7 @@ elif page == "🌦️ Weather Intel":
         # NDVI Health banner
         h_color = ndvi_data["health_color"]
         st.markdown(
-            f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:20px;margin:12px 0;"
+            f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:20px;margin:12px 0;"
             f"border-left:4px solid {h_color};'>"
             f"<div style='display:flex;align-items:center;gap:16px;'>"
             f"<div style='font-size:2.5rem;font-weight:800;color:{h_color};'>{ndvi_data['mean']:.3f}</div>"
@@ -3321,14 +3136,14 @@ elif page == "🌦️ Weather Intel":
             # NDVI Heatmap
             fig_ndvi = px.imshow(ndvi_data["ndvi_grid"], color_continuous_scale="RdYlGn",
                                  zmin=-0.1, zmax=0.95,
-                                 title="NDVI Spatial Heatmap", template="plotly_dark")
+                                 title="NDVI Spatial Heatmap", template="plotly_white")
             fig_ndvi.update_layout(paper_bgcolor="rgba(0,0,0,0)", height=350)
             st.plotly_chart(fig_ndvi, width='stretch')
         with ndvi_r2:
             # Monthly NDVI trend
             months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
             fig_trend = px.line(x=months, y=ndvi_data["temporal"],
-                                title="12-Month NDVI Trend", template="plotly_dark",
+                                title="12-Month NDVI Trend", template="plotly_white",
                                 labels={"x": "Month", "y": "NDVI"})
             fig_trend.update_traces(line_color="#4CAF50", line_width=3)
             fig_trend.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
@@ -3345,7 +3160,7 @@ elif page == "🌦️ Weather Intel":
             for rec in ndvi_analysis["recommendations"]:
                 st.markdown(
                     f"<div style='background:rgba(76,175,80,0.08);border-left:3px solid #4CAF50;"
-                    f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#e0e0e0;'>{rec}</div>",
+                    f"border-radius:8px;padding:10px 14px;margin:6px 0;color:#344E41;'>{rec}</div>",
                     unsafe_allow_html=True
                 )
 
@@ -3395,7 +3210,7 @@ elif page == "🌦️ Weather Intel":
             _next = "Kharif (June–October): Rice, Maize, Cotton, Soybean, Groundnut"
 
         st.markdown(
-            f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:18px;margin:12px 0;'>"
+            f"<div style='background:rgba(45,106,79,0.04);border-radius:14px;padding:18px;margin:12px 0;'>"
             f"<div style='font-size:1.5rem;font-weight:800;color:{_s_color};text-align:center;'>"
             f"🌾 Current Season: {_season}</div>"
             f"<div style='color:#e0e0e0;text-align:center;margin-top:6px;font-size:0.92rem;'>{_s_desc}</div>"
@@ -3459,7 +3274,7 @@ elif page == "📊 Model Hub":
 
         f"MAE = <b>{bm['MAE']}</b> &nbsp;|&nbsp; RMSE = <b>{bm['RMSE']}</b></span><br>"
 
-        f"<span style='font-size:0.78rem;color:#81c784;'>"
+        f"<span style='font-size:0.78rem;color:#40916C;'>"
 
         f"Trained in {meta.get('training_rounds', 1)} rounds &mdash; "
 
@@ -3493,7 +3308,7 @@ elif page == "📊 Model Hub":
 
                     f"<b>{info.get('icon','')} {name}{badge}</b><br>"
 
-                    f"<span style='font-size:0.72rem;color:#81c784;'>{info.get('family','')}</span><br>"
+                    f"<span style='font-size:0.72rem;color:#40916C;'>{info.get('family','')}</span><br>"
 
                     f"<span style='font-size:0.78rem;'>{info.get('desc','')[:80]}…</span><br>"
 
@@ -3521,7 +3336,7 @@ elif page == "📊 Model Hub":
 
                      color="R2", color_continuous_scale="Greens",
 
-                     title="R² Score by Model (higher = better)", template="plotly_dark")
+                     title="R² Score by Model (higher = better)", template="plotly_white")
 
         fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
 
@@ -3551,7 +3366,7 @@ elif page == "📊 Model Hub":
 
                            1, 2)
 
-        fig2.update_layout(template="plotly_dark", paper_bgcolor="rgba(0,0,0,0)",
+        fig2.update_layout(template="plotly_white", paper_bgcolor="rgba(0,0,0,0)",
 
                            plot_bgcolor="rgba(0,0,0,0)", height=400)
 
@@ -3575,7 +3390,7 @@ elif page == "📊 Model Hub":
 
                           color="Importance", color_continuous_scale="Greens",
 
-                          title=f"Feature Importances — {model_sel}", template="plotly_dark")
+                          title=f"Feature Importances — {model_sel}", template="plotly_white")
 
             fig3.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
 
@@ -3703,7 +3518,7 @@ elif page == "🗄️ Data Explorer":
 
                         x="State", y="Yield_ton_per_ha", color="State",
 
-                        box=True, template="plotly_dark",
+                        box=True, template="plotly_white",
 
                         color_discrete_sequence=px.colors.qualitative.Pastel)
 
@@ -3721,7 +3536,7 @@ elif page == "🗄️ Data Explorer":
 
                           x="Rainfall", y="Yield_ton_per_ha", color="Crop",
 
-                          opacity=0.5, template="plotly_dark")
+                          opacity=0.5, template="plotly_white")
 
         fig2.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
 
