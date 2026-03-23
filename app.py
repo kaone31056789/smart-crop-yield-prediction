@@ -511,6 +511,12 @@ def _get_theme_css(theme="light"):
     cursor: pointer;
 }}
 
+[data-testid="stAppViewContainer"] div.stButton > button p,
+[data-testid="stAppViewContainer"] div.stButton > button span,
+[data-testid="stAppViewContainer"] div.stButton > button div {{
+    color: var(--btn-text) !important;
+}}
+
 [data-testid="stAppViewContainer"] div.stButton > button:hover {{
     background: var(--btn-hover) !important;
     color: var(--btn-text) !important;
