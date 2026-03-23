@@ -49,6 +49,11 @@
 
 ![Data Explorer](screenshots/06_data_explorer.png)
 
+### 🌙 Deep Forest Night Theme
+> Instantly toggle between the Apple-inspired Light theme and the high-contrast Dark theme for optimal viewing in any environment.
+
+![Dark Mode](screenshots/07_dark_mode.png)
+
 ---
 
 ## ✨ Features
