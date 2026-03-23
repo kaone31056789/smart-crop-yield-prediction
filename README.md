@@ -102,7 +102,7 @@
 
 ### 🔄 Auto-Retrain System
 - Automatic model retraining triggered by:
-  - Every 5 app opens
+  - Every 25 app opens
   - Dataset changes
   - New machine detection
 - 3-round tournament training with best-round selection
@@ -136,7 +136,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 # Run the app
-python -m streamlit run app.py
+streamlit run app.py
 ```
 
 The app will open at `http://localhost:8501`
@@ -236,10 +236,10 @@ This project is licensed under the MIT License.
 
 ---
 
-## 👤 Author
+## 👤 Authors
 
-**Parikshit** — B.Tech Semester 4 Mini Project
-**Dhruv Gouniyal** — B.Tech Semester 4 Mini Project
+- **Parikshit** — B.Tech Semester 4 Mini Project
+- **Dhruv Gouniyal** — B.Tech Semester 4 Mini Project
 
 ---
 

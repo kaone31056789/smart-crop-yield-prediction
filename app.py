@@ -57,9 +57,6 @@ from model          import (train_all_models, predict_yield, load_meta, is_train
                              mark_training_done, get_retrain_status)
 
 from weather_api    import fetch_weather, fetch_weather_for_area, weather_code_text, detect_user_location
-from ai_engine      import (get_engine, ai_detect_disease, ai_analyze_image,
-                             ai_soil_interpretation, ai_smart_recommendations, ai_chat,
-                             PROVIDERS)
 
 # ── Heavy modules: lazy-loaded per-page for faster startup ──
 # image_analyzer, soil_analyzer, recommendation_engine, disease_detector,
@@ -105,75 +102,84 @@ def _app_css():
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap');
 
 /* ══════════════════════════════════════════════════════════════════
 
-   ROOT – Layered forest scene background
+   ROOT – Dark Cyber-Agriculture (Out of this World)
 
    ══════════════════════════════════════════════════════════════════ */
 
+@keyframes cyberFloat {
+    0%   { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+    50%  { opacity: 0.8; }
+    100% { transform: translateY(-100px) rotate(45deg); opacity: 0.1; }
+}
+
+@keyframes holographicPulse {
+    0%   { opacity: 0.8; filter: drop-shadow(0 0 2px #00E676); }
+    50%  { opacity: 1; filter: drop-shadow(0 0 10px #00E5FF); }
+    100% { opacity: 0.8; filter: drop-shadow(0 0 2px #00E676); }
+}
+
+@keyframes nebulaDrift {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+}
+
 [data-testid="stAppViewContainer"] {
 
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Rajdhani', sans-serif;
 
-    color: #e8f0e4;
+    color: #E0F2F1; /* Ice white / pale teal for text */
 
     background:
 
-        /* ── Fireflies / sparkle dots ── */
+        /* ── Deep Space Nebula Base ── */
+        radial-gradient(ellipse at 10% 20%, rgba(26, 8, 38, 0.8) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(4, 26, 30, 0.8) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(0, 30, 20, 0.6) 0%, transparent 60%),
+        
+        /* ── Cyber Grid ── */
+        linear-gradient(rgba(0, 230, 118, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 230, 118, 0.03) 1px, transparent 1px),
 
-        radial-gradient(1.5px 1.5px at 12% 28%, rgba(255,235,59,0.35) 50%, transparent 50%),
-
-        radial-gradient(1px 1px at 35% 15%, rgba(255,235,59,0.25) 50%, transparent 50%),
-
-        radial-gradient(2px 2px at 72% 22%, rgba(200,230,100,0.3) 50%, transparent 50%),
-
-        radial-gradient(1px 1px at 88% 35%, rgba(255,235,59,0.2) 50%, transparent 50%),
-
-        radial-gradient(1.5px 1.5px at 55% 8%, rgba(255,255,200,0.25) 50%, transparent 50%),
-
-        /* ── Distant hills / mountains ── */
-
-        radial-gradient(ellipse 120% 18% at 25% 92%, #1a3a1a 80%, transparent 80%),
-
-        radial-gradient(ellipse 100% 22% at 70% 94%, #15331a 80%, transparent 80%),
-
-        radial-gradient(ellipse 160% 14% at 50% 96%, #122b14 80%, transparent 80%),
-
-        /* ── Mist layer ── */
-
-        linear-gradient(180deg, transparent 55%, rgba(180,220,180,0.04) 70%, transparent 85%),
-
-        /* ── Sky gradient: night sky → deep forest ── */
-
-        linear-gradient(175deg,
-
-            #0b1a2e 0%,
-
-            #0e2235 8%,
-
-            #112a3a 16%,
-
-            #0f3328 30%,
-
-            #0d2e1f 45%,
-
-            #0c2819 60%,
-
-            #0a2414 75%,
-
-            #071c0f 90%,
-
-            #050f08 100%
-
+        /* ── Void Black Floor ── */
+        linear-gradient(180deg,
+            #02040A 0%,      /* Deep void black */
+            #050A14 40%,     /* Extremely dark blue/cyan */
+            #030F12 80%,     /* Dark teal space */
+            #00150F 100%     /* Deep dark green underbelly */
         );
+        
+    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px, 100% 100%;
+    animation: nebulaDrift 60s ease infinite;
 
     background-attachment: fixed;
 
 }
 
-/* ── Decorative tree silhouettes at bottom (via ::after pseudo on main block) ── */
+/* ── Floating Digital Spores (Cyber Particles) ── */
+[data-testid="stAppViewContainer"]::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(1.5px 1.5px at 20% 80%, #00E676, transparent),
+        radial-gradient(2px 2px at 60% 40%, #00E5FF, transparent),
+        radial-gradient(1px 1px at 80% 90%, #B388FF, transparent),
+        radial-gradient(2.5px 2.5px at 30% 20%, #64FFDA, transparent),
+        radial-gradient(1px 1px at 10% 10%, #00E676, transparent),
+        radial-gradient(2px 2px at 90% 30%, #00E5FF, transparent),
+        radial-gradient(1.5px 1.5px at 50% 70%, #64FFDA, transparent);
+    animation: cyberFloat 15s linear infinite;
+    opacity: 0.6;
+}
+
+/* ── Holographic Base Glow at Bottom ── */
 
 [data-testid="stAppViewContainer"]::after {
 
@@ -183,71 +189,43 @@ def _app_css():
 
     bottom: 0; left: 0; right: 0;
 
-    height: 120px;
+    height: 100px;
 
     pointer-events: none;
 
     z-index: 0;
 
     background:
+        linear-gradient(0deg, rgba(0, 230, 118, 0.15) 0%, rgba(0, 229, 255, 0.05) 50%, transparent 100%);
 
-        /* Tree 1 – tall pine left */
+    border-top: 1px solid rgba(0, 230, 118, 0.3);
+    box-shadow: 0 -5px 20px rgba(0, 230, 118, 0.2);
 
-        conic-gradient(from 250deg at 8% 100%, #0a1f0d 0deg, #0a1f0d 40deg, transparent 40deg) no-repeat,
-
-        /* Tree 2 – bushy center-left */
-
-        radial-gradient(ellipse 40px 55px at 22% 70%, #0d2310 99%, transparent 100%) no-repeat,
-
-        /* Tree 3 – tall pine center */
-
-        conic-gradient(from 250deg at 50% 100%, #081a0b 0deg, #081a0b 35deg, transparent 35deg) no-repeat,
-
-        /* Tree 4 – small right */
-
-        radial-gradient(ellipse 30px 40px at 78% 80%, #0b1e0e 99%, transparent 100%) no-repeat,
-
-        /* Ground */
-
-        linear-gradient(0deg, #060e07 0%, #060e07 25px, transparent 25px);
-
-    opacity: 0.5;
+    animation: holographicPulse 4s ease-in-out infinite alternate;
 
 }
 
-/* ── Sidebar – wooden bark feel ── */
+/* ── Sidebar – Dark Glass Terminal ── */
 
 [data-testid="stSidebar"] {
 
     background:
 
-        repeating-linear-gradient(
+        linear-gradient(180deg, rgba(5, 10, 20, 0.85) 0%, rgba(2, 5, 10, 0.95) 100%);
 
-            0deg,
+    border-right: 1px solid rgba(0, 229, 255, 0.3);
 
-            rgba(80,50,20,0.08) 0px,
+    box-shadow: 5px 0 25px rgba(0, 229, 255, 0.1);
 
-            rgba(60,35,12,0.05) 2px,
-
-            transparent 3px,
-
-            transparent 8px
-
-        ),
-
-        linear-gradient(180deg, #0f1e10 0%, #0a180b 30%, #071208 70%, #050d06 100%);
-
-    border-right: 2px solid rgba(139,90,43,0.3);
-
-    box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+    backdrop-filter: blur(15px);
 
 }
 
-[data-testid="stSidebar"] * { color: #b8d4a8 !important; }
+[data-testid="stSidebar"] * { color: #84FFFF !important; }
 
 /* ══════════════════════════════════════════════════════════════════
 
-   HERO BANNER – storybook opening page
+   HERO BANNER – Holographic Control Deck
 
    ══════════════════════════════════════════════════════════════════ */
 
@@ -255,27 +233,22 @@ def _app_css():
 
     background:
 
-        radial-gradient(ellipse 50% 80% at 80% 20%, rgba(255,200,50,0.06), transparent),
+        linear-gradient(135deg, rgba(0, 20, 20, 0.6), rgba(5, 10, 25, 0.8));
 
-        linear-gradient(135deg, rgba(34,90,34,0.45), rgba(20,60,25,0.25), rgba(15,45,20,0.15));
+    border: 1px solid rgba(0, 230, 118, 0.5);
 
-    border: 2px solid rgba(139,195,74,0.25);
-
-    border-radius: 24px;
+    border-radius: 12px;
 
     padding: 36px 40px;
 
     margin-bottom: 28px;
 
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
 
-    box-shadow:
-
-        0 8px 32px rgba(0,0,0,0.4),
-
-        0 2px 8px rgba(139,195,74,0.08),
-
-        inset 0 1px 0 rgba(200,255,200,0.06);
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        inset 0 0 20px rgba(0, 230, 118, 0.1),
+        0 0 10px rgba(0, 230, 118, 0.2);
 
     position: relative;
 
@@ -283,263 +256,276 @@ def _app_css():
 
 }
 
+/* Futuristic Scanline over Hero */
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 230, 118, 0.05) 2px,
+        rgba(0, 230, 118, 0.05) 4px
+    );
+    opacity: 0.5;
+}
+
 .hero::before {
 
-    content: "🌲🌳🌿🦜🌾";
+    content: "⚡🧬🛰️🌌";
 
     position: absolute;
 
-    bottom: 8px; right: 20px;
+    top: 20px; right: 20px;
 
-    font-size: 1.3rem;
+    font-size: 2.5rem;
 
     opacity: 0.3;
 
-    letter-spacing: 6px;
+    letter-spacing: 5px;
+    filter: drop-shadow(0 0 10px #00E5FF);
 
 }
 
 .hero h1 {
 
-    margin: 0; font-size: 2.3rem; font-weight: 900;
+    margin: 0; font-size: 3rem; font-weight: 900; font-family: 'Orbitron', sans-serif;
 
-    color: #a5d6a7;
-
-    text-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 30px rgba(139,195,74,0.15);
+    background: linear-gradient(90deg, #00E676, #00E5FF, #B388FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
 
 }
 
 .hero p {
 
-    margin: 8px 0 0; font-size: 1.02rem; color: #c5e1a5;
+    margin: 10px 0 0; font-size: 1.2rem; color: #B2DFDB;
 
-    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    font-weight: 500;
+    letter-spacing: 1px;
 
 }
 
 /* ══════════════════════════════════════════════════════════════════
 
-   CARDS – wooden plank / parchment with 3D depth
+   CARDS – Holographic Dark Glass
 
    ══════════════════════════════════════════════════════════════════ */
 
 .card {
 
-    background:
+    background: rgba(10, 15, 25, 0.6);
 
-        linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(0, 229, 255, 0.3);
 
-    border: 1px solid rgba(139,195,74,0.2);
+    border-radius: 12px;
 
-    border-radius: 18px;
+    padding: 24px;
 
-    padding: 20px 24px;
+    margin-bottom: 20px;
 
-    margin-bottom: 16px;
-
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
 
     box-shadow:
 
-        0 6px 24px rgba(0,0,0,0.35),
+        0 10px 30px rgba(0, 0, 0, 0.8),
+        inset 0 0 15px rgba(0, 229, 255, 0.05);
 
-        0 1px 3px rgba(0,0,0,0.2),
-
-        inset 0 1px 0 rgba(255,255,255,0.04);
-
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
 }
 
 .card:hover {
 
-    transform: translateY(-2px);
+    transform: translateY(-5px);
+    border-color: rgba(0, 230, 118, 0.8);
 
     box-shadow:
 
-        0 10px 36px rgba(0,0,0,0.45),
-
-        0 2px 6px rgba(0,0,0,0.25),
-
-        inset 0 1px 0 rgba(255,255,255,0.06);
+        0 15px 40px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(0, 230, 118, 0.3),
+        inset 0 0 20px rgba(0, 230, 118, 0.1);
 
 }
 
 .metric-card {
 
-    background:
+    background: linear-gradient(145deg, rgba(5, 20, 25, 0.8) 0%, rgba(2, 10, 15, 0.9) 100%);
 
-        linear-gradient(145deg, rgba(46,125,50,0.25) 0%, rgba(27,94,32,0.1) 100%);
+    border: 1px solid rgba(0, 230, 118, 0.4);
 
-    border: 1px solid rgba(139,195,74,0.35);
+    border-radius: 12px;
 
-    border-radius: 16px;
-
-    padding: 20px 16px;
+    padding: 22px 18px;
 
     text-align: center;
+    
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 10px rgba(0, 230, 118, 0.1);
 
-    box-shadow:
-
-        0 6px 20px rgba(0,0,0,0.4),
-
-        inset 0 1px 0 rgba(200,255,200,0.06),
-
-        inset 0 -2px 4px rgba(0,0,0,0.15);
-
-    transition: transform 0.25s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
 
 }
 
-.metric-card:hover { transform: translateY(-3px) scale(1.02); }
+.metric-card::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, #00E676, transparent);
+}
 
-.metric-value { font-size: 2rem; font-weight: 900; color: #a5d6a7; text-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+.metric-card:hover { 
+    transform: translateY(-8px) scale(1.02); 
+    border-color: #00E5FF;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.9), 0 0 25px rgba(0, 229, 255, 0.3), inset 0 0 15px rgba(0, 229, 255, 0.1);
+}
 
-.metric-label { font-size: 0.78rem; color: #81c784; margin-top: 4px; font-weight: 600; }
+.metric-value { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 700; color: #FFFFFF; letter-spacing: 2px; text-shadow: 0 0 15px #00E676, 0 0 5px #00E676; }
 
-/* ── Big result box – golden harvest ── */
+.metric-label { font-size: 0.9rem; color: #1DE9B6; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px;}
+
+/* ── Big result box – Reactor Core ── */
+
+@keyframes reactorPulse {
+    0% { box-shadow: 0 0 30px rgba(0, 230, 118, 0.2), inset 0 0 20px rgba(0, 230, 118, 0.1); border-color: rgba(0, 230, 118, 0.5); }
+    100% { box-shadow: 0 0 60px rgba(0, 230, 118, 0.5), inset 0 0 40px rgba(0, 230, 118, 0.3); border-color: rgba(0, 230, 118, 1); }
+}
 
 .result-box {
 
     background:
 
-        radial-gradient(ellipse at 50% 30%, rgba(255,235,59,0.08), transparent 60%),
+        radial-gradient(circle at 50% 50%, rgba(0, 230, 118, 0.1) 0%, transparent 70%),
 
-        linear-gradient(135deg, #1b5e20, #2e7d32, #33691e);
+        linear-gradient(135deg, #02100A, #010508);
 
-    border-radius: 24px;
+    border-radius: 16px;
 
-    padding: 32px;
+    padding: 45px;
 
     text-align: center;
 
-    border: 2px solid #8bc34a;
+    border: 2px solid #00E676;
 
-    box-shadow:
+    animation: reactorPulse 2s ease-in-out infinite alternate;
+    position: relative;
+}
 
-        0 12px 48px rgba(0,0,0,0.5),
-
-        0 0 60px rgba(139,195,74,0.12),
-
-        inset 0 2px 0 rgba(255,255,255,0.07);
-
+.result-box::before {
+    content: '[ SYS.YIELD_CALC // OPTIMAL ]';
+    position: absolute; top: 10px; left: 15px; font-family: 'Orbitron', sans-serif; font-size: 0.6rem; color: #00E676; letter-spacing: 2px; opacity: 0.7;
 }
 
 .result-value {
 
-    font-size: 3.4rem; font-weight: 900; color: #c5e1a5;
-
-    text-shadow: 0 3px 12px rgba(0,0,0,0.5), 0 0 20px rgba(139,195,74,0.2);
-
+    font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; 
+    
+    color: #FFFFFF;
+    text-shadow: 0 0 20px #00E676, 0 0 40px #00E676, 0 0 10px #FFFFFF;
+    letter-spacing: 2px;
 }
 
-.result-label { font-size: 0.95rem; color: #dcedc8; margin-top: 6px; }
+.result-label { font-size: 1.2rem; color: #64FFDA; margin-top: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 5px;}
 
-/* ── Model card – leaf-like ── */
+/* ── Model card – Data Node ── */
 
 .model-card {
 
-    background: rgba(255,255,255,0.035);
+    background: rgba(15, 10, 25, 0.6);
 
-    border: 1px solid rgba(139,195,74,0.25);
+    border: 1px solid rgba(179, 136, 255, 0.4);
 
-    border-radius: 16px;
+    border-left: 4px solid #B388FF;
 
-    padding: 16px 18px;
+    border-radius: 8px;
 
-    margin-bottom: 10px;
+    padding: 18px 20px;
 
-    box-shadow:
+    margin-bottom: 12px;
 
-        0 4px 16px rgba(0,0,0,0.3),
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
 
-        inset 0 1px 0 rgba(255,255,255,0.03);
-
-    transition: all 0.25s ease;
+    transition: all 0.3s ease;
 
 }
 
 .model-card:hover {
 
-    border-color: #8bc34a;
+    border-color: #D500F9;
+    border-left-color: #D500F9;
 
-    transform: translateY(-3px);
+    transform: translateX(10px);
 
-    box-shadow:
+    background: rgba(25, 10, 40, 0.8);
 
-        0 8px 28px rgba(0,0,0,0.4),
-
-        0 0 16px rgba(139,195,74,0.1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 15px rgba(213, 0, 249, 0.3);
 
 }
 
-/* ── Weather card – sky & clouds ── */
+/* ── Weather card – Atmospheric Scanner ── */
 
 .weather-card {
 
     background:
 
-        radial-gradient(ellipse at 70% 20%, rgba(100,181,246,0.12), transparent 50%),
+        linear-gradient(135deg, rgba(2, 20, 30, 0.8), rgba(0, 10, 20, 0.9));
 
-        linear-gradient(135deg, rgba(33,150,243,0.12), rgba(3,169,244,0.06));
+    border: 1px solid rgba(0, 229, 255, 0.4);
 
-    border: 1px solid rgba(100,181,246,0.3);
+    border-radius: 12px;
 
-    border-radius: 18px;
-
-    padding: 18px 22px;
+    padding: 24px;
 
     text-align: center;
 
-    box-shadow:
-
-        0 6px 24px rgba(0,0,0,0.35),
-
-        inset 0 1px 0 rgba(200,230,255,0.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 229, 255, 0.1);
 
 }
 
-.weather-value { font-size: 1.8rem; font-weight: 800; color: #90caf9; text-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+.weather-value { font-family: 'Orbitron', sans-serif; font-size: 2.2rem; font-weight: 700; color: #FFFFFF; text-shadow: 0 0 15px #00E5FF; }
 
-.weather-label { font-size: 0.76rem; color: #bbdefb; margin-top: 3px; font-weight: 600; }
+.weather-label { font-size: 0.9rem; color: #84FFFF; margin-top: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;}
 
 /* ── Image scan card ── */
 
 .scan-card {
 
-    background:
+    background: linear-gradient(135deg, rgba(20, 5, 30, 0.8), rgba(10, 2, 20, 0.9));
 
-        linear-gradient(135deg, rgba(156,39,176,0.12), rgba(186,104,200,0.06));
+    border: 1px solid rgba(213, 0, 249, 0.5);
 
-    border: 1px solid rgba(186,104,200,0.3);
+    border-radius: 12px;
 
-    border-radius: 18px;
+    padding: 24px;
 
-    padding: 20px;
-
-    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8), inset 0 0 20px rgba(213, 0, 249, 0.1);
 
 }
 
 /* ══════════════════════════════════════════════════════════════════
 
-   SECTION HEADERS – engraved wood
+   SECTION HEADERS – Cyber typography
 
    ══════════════════════════════════════════════════════════════════ */
 
 .section-header {
 
-    font-size: 1.5rem; font-weight: 800; color: #a5d6a7;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.6rem; font-weight: 700; color: #FFFFFF;
 
-    padding-bottom: 10px;
+    padding-bottom: 12px;
 
-    border-bottom: 3px solid rgba(139,195,74,0.3);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.3);
 
-    margin-bottom: 22px;
-
-    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
-
+    margin-bottom: 28px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
     position: relative;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
 
 }
 
@@ -547,73 +533,67 @@ def _app_css():
 
     content: "";
 
-    position: absolute; bottom: -3px; left: 0; width: 60px; height: 3px;
+    position: absolute; bottom: -1px; left: 0; width: 100px; height: 2px;
 
-    background: #8bc34a;
-
-    border-radius: 2px;
-
-    box-shadow: 0 0 8px rgba(139,195,74,0.4);
+    background: #00E5FF;
+    box-shadow: 0 0 10px #00E5FF;
 
 }
 
 .sub-header {
 
-    font-size: 1.1rem; font-weight: 700; color: #c5e1a5; margin-bottom: 10px;
-
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem; font-weight: 600; color: #00E676; margin-bottom: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 
 }
 
 /* ══════════════════════════════════════════════════════════════════
 
-   BUTTONS – mossy stone / wooden 3D
+   BUTTONS – UI Controls (Angular, Glowing)
 
    ══════════════════════════════════════════════════════════════════ */
 
 [data-testid="stAppViewContainer"] div.stButton > button {
 
-    background: linear-gradient(180deg, #3e8e41 0%, #2e7d32 40%, #1b5e20 100%) !important;
+    background: rgba(0, 230, 118, 0.1) !important;
 
-    color: #e8f5e9 !important;
+    color: #00E676 !important;
 
-    border: 1px solid #4caf50 !important;
+    border: 1px solid #00E676 !important;
 
-    border-radius: 14px;
+    border-radius: 4px; /* Sharp corners */
 
+    font-family: 'Orbitron', sans-serif;
     font-weight: 700;
 
-    padding: 11px 24px;
+    padding: 12px 28px;
 
-    font-size: 0.95rem;
+    font-size: 1rem;
 
     width: 100%;
 
-    box-shadow:
+    text-transform: uppercase;
+    letter-spacing: 2px;
 
-        0 4px 12px rgba(0,0,0,0.4),
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.2), inset 0 0 10px rgba(0, 230, 118, 0.1);
 
-        0 2px 4px rgba(0,0,0,0.2),
-
-        inset 0 1px 0 rgba(255,255,255,0.15);
-
-    transition: all 0.2s;
-
-    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
 
 }
 
 [data-testid="stAppViewContainer"] div.stButton > button:hover {
 
+    background: rgba(0, 230, 118, 0.2) !important;
+
+    color: #FFFFFF !important;
+
+    border-color: #FFFFFF !important;
+
     transform: translateY(-2px);
 
-    box-shadow:
-
-        0 8px 24px rgba(0,0,0,0.45),
-
-        0 2px 8px rgba(76,175,80,0.2),
-
-        inset 0 1px 0 rgba(255,255,255,0.2);
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.6), inset 0 0 20px rgba(0, 230, 118, 0.3);
 
 }
 
@@ -621,11 +601,7 @@ def _app_css():
 
     transform: translateY(1px);
 
-    box-shadow:
-
-        0 2px 6px rgba(0,0,0,0.4),
-
-        inset 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 0 5px rgba(0, 230, 118, 0.5);
 
 }
 
@@ -633,40 +609,42 @@ def _app_css():
 
 [data-testid="stSidebar"] div.stButton > button {
 
-    background: rgba(255,255,255,0.03) !important;
+    background: transparent !important;
 
-    border: 1px solid rgba(139,195,74,0.15) !important;
+    border: 1px solid transparent !important;
+    border-left: 2px solid rgba(0, 229, 255, 0.3) !important;
 
-    border-radius: 14px !important;
+    border-radius: 0 !important;
 
-    color: #b8d4a8 !important;
+    color: #84FFFF !important;
 
     font-weight: 600 !important;
 
-    font-size: 0.9rem !important;
+    font-size: 1rem !important;
 
-    padding: 12px 16px !important;
+    padding: 10px 15px !important;
 
     text-align: left !important;
 
-    margin-bottom: 3px !important;
+    margin-bottom: 8px !important;
 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+    box-shadow: none !important;
 
-    transition: all 0.25s ease !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
 }
 
 [data-testid="stSidebar"] div.stButton > button:hover {
 
-    background: rgba(139,195,74,0.12) !important;
+    background: linear-gradient(90deg, rgba(0, 229, 255, 0.1), transparent) !important;
 
-    border-color: rgba(139,195,74,0.3) !important;
-
-    transform: translateX(4px) !important;
-
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 8px rgba(139,195,74,0.08) !important;
-
+    color: #FFFFFF !important;
+    border-left: 2px solid #00E5FF !important;
+    
+    transform: translateX(5px) !important;
+    text-shadow: 0 0 8px #00E5FF;
 }
 
 /* ── Active nav (primary) ── */
@@ -675,15 +653,17 @@ def _app_css():
 
 [data-testid="stSidebar"] div.stButton > button[data-testid="stBaseButton-primary"] {
 
-    background: linear-gradient(135deg, rgba(56,142,60,0.35), rgba(27,94,32,0.2)) !important;
+    background: linear-gradient(90deg, rgba(0, 230, 118, 0.2), transparent) !important;
 
-    border: 1.5px solid #8bc34a !important;
+    border: 1px solid rgba(0, 230, 118, 0.3) !important;
+    border-left: 4px solid #00E676 !important;
 
-    color: #c5e1a5 !important;
+    color: #FFFFFF !important;
 
-    font-weight: 800 !important;
-
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3), 0 0 12px rgba(139,195,74,0.08) !important;
+    font-weight: 700 !important;
+    
+    box-shadow: inset 10px 0 20px rgba(0, 230, 118, 0.1) !important;
+    text-shadow: 0 0 10px #00E676 !important;
 
 }
 
@@ -691,9 +671,10 @@ def _app_css():
 
 [data-testid="stSidebar"] div.stButton > button[data-testid="stBaseButton-primary"]:hover {
 
-    background: linear-gradient(135deg, rgba(56,142,60,0.45), rgba(27,94,32,0.3)) !important;
+    background: linear-gradient(90deg, rgba(0, 230, 118, 0.3), transparent) !important;
 
-    transform: translateX(4px) !important;
+    transform: translateX(5px) !important;
+    border-color: #00E676 !important;
 
 }
 
@@ -701,21 +682,27 @@ def _app_css():
 
 [data-testid="stSidebar"] button[key*="retrain"] {
 
-    background: linear-gradient(180deg, #3e8e41, #2e7d32, #1b5e20) !important;
+    background: rgba(213, 0, 249, 0.1) !important;
 
-    border: 1px solid #4caf50 !important;
+    border: 1px solid #D500F9 !important;
+    border-left: 4px solid #D500F9 !important;
 
-    color: #e8f5e9 !important;
+    color: #E040FB !important;
 
-    font-weight: 700 !important;
+    box-shadow: 0 0 15px rgba(213, 0, 249, 0.2) !important;
+    
+    border-radius: 0 !important;
 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1) !important;
-
+}
+[data-testid="stSidebar"] button[key*="retrain"]:hover {
+    box-shadow: 0 0 25px rgba(213, 0, 249, 0.5) !important;
+    background: rgba(213, 0, 249, 0.2) !important;
+    color: #FFF !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════
 
-   FORM ELEMENTS – organic feel
+   FORM ELEMENTS – Data input fields
 
    ══════════════════════════════════════════════════════════════════ */
 
@@ -725,60 +712,97 @@ div[data-baseweb="input"] > div,
 
 textarea {
 
-    background: rgba(255,255,255,0.04) !important;
+    background: rgba(2, 8, 15, 0.8) !important;
 
-    border-color: rgba(139,195,74,0.3) !important;
+    border: 1px solid rgba(0, 229, 255, 0.3) !important;
 
-    color: #e8f0e4 !important;
+    color: #FFFFFF !important;
 
-    border-radius: 12px !important;
+    border-radius: 4px !important; 
 
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.15) !important;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.8) !important;
+    
+    transition: all 0.2s ease !important;
+    font-family: 'Rajdhani', sans-serif !important;
+    font-size: 1.1rem !important;
 
 }
 
-label { color: #c5e1a5 !important; font-weight: 600 !important; }
+div[data-baseweb="select"] > div:hover,
+div[data-baseweb="input"] > div:focus-within {
+    border-color: #00E5FF !important;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.2), inset 0 0 10px rgba(0,0,0,0.8) !important;
+}
 
-/* ── Sliders – green vine ── */
+label { color: #84FFFF !important; font-weight: 600 !important; letter-spacing: 1px; font-size: 0.95rem !important; text-transform: uppercase;}
+
+/* ── Sliders – Neon Bar ── */
 
 div[data-baseweb="slider"] div[role="slider"] {
 
-    background: #8bc34a !important;
+    background: #00E676 !important;
 
-    box-shadow: 0 0 8px rgba(139,195,74,0.4), 0 2px 4px rgba(0,0,0,0.3) !important;
+    border: 2px solid #FFF !important;
+
+    box-shadow: 0 0 10px #00E676, 0 0 5px #FFF !important;
+    border-radius: 0 !important;
 
 }
 
 /* ── Tabs ── */
 
-.stTabs [data-baseweb="tab-list"] { gap: 3px; }
+.stTabs [data-baseweb="tab-list"] { gap: 10px; border-bottom: 1px solid rgba(0, 229, 255, 0.3); padding-bottom: 0px;}
 
 .stTabs [data-baseweb="tab"] {
 
-    background: rgba(139,195,74,0.08);
+    background: transparent;
 
-    border-radius: 10px 10px 0 0;
+    border-radius: 4px 4px 0 0;
 
-    color: #c5e1a5;
+    color: #00E5FF;
+    opacity: 0.6;
 
+    font-family: 'Orbitron', sans-serif;
     font-weight: 600;
 
-    padding: 10px 22px;
+    padding: 12px 20px;
+    
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 
-    box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+}
 
+.stTabs [data-baseweb="tab"]:hover {
+    color: #FFFFFF;
+    opacity: 1;
+    background: rgba(0, 229, 255, 0.1);
 }
 
 .stTabs [aria-selected="true"] {
 
-    background: rgba(139,195,74,0.22) !important;
+    background: rgba(0, 229, 255, 0.15) !important;
 
-    color: #c5e1a5 !important;
+    color: #FFFFFF !important;
+    opacity: 1 !important;
 
-    border-bottom: 3px solid #8bc34a;
+    border-bottom: 3px solid #00E5FF;
+    border-top: 1px solid rgba(0, 229, 255, 0.5);
+    border-left: 1px solid rgba(0, 229, 255, 0.5);
+    border-right: 1px solid rgba(0, 229, 255, 0.5);
+    
+    box-shadow: inset 0 10px 20px rgba(0, 229, 255, 0.1) !important;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8) !important;
 
-    box-shadow: 0 -2px 10px rgba(139,195,74,0.1);
+}
 
+/* ── Progress Bar ── */
+[data-testid="stProgress"] > div > div > div {
+    background-color: rgba(0, 230, 118, 0.1) !important;
+}
+[data-testid="stProgress"] > div > div > div > div {
+    background-color: #00E5FF !important;
+    box-shadow: 0 0 10px #00E5FF, 0 0 5px #00E676 !important;
 }
 
 /* ══════════════════════════════════════════════════════════════════
@@ -789,25 +813,25 @@ div[data-baseweb="slider"] div[role="slider"] {
 
 .weather-inline {
 
-    background:
+    background: rgba(2, 10, 20, 0.8);
 
-        radial-gradient(ellipse at 80% 10%, rgba(100,181,246,0.08), transparent 50%),
+    border: 1px solid rgba(0, 229, 255, 0.4);
+    border-left: 4px solid #00E5FF;
 
-        rgba(33,150,243,0.06);
+    border-radius: 4px;
 
-    border: 1px solid rgba(100,181,246,0.2);
+    padding: 15px 20px;
 
-    border-radius: 12px;
+    margin-top: 15px;
 
-    padding: 10px 14px;
+    font-size: 1rem;
+    
+    font-weight: 600;
+    letter-spacing: 1px;
 
-    margin-top: 8px;
+    color: #B2DFDB;
 
-    font-size: 0.8rem;
-
-    color: #bbdefb;
-
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
 
 }
 
@@ -819,7 +843,6 @@ html { scroll-behavior: smooth; }
 </style>
 
 """
-
 st.markdown(_app_css(), unsafe_allow_html=True)
 
 # ──────────────────────────────────────────────────────────────────────────── #
@@ -1000,8 +1023,6 @@ NAV_ITEMS = [
 
     ("🗄️", "Data Explorer",  "🗄️ Data Explorer"),
 
-    ("🤖", "AI Chat",        "🤖 AI Chat"),
-
 ]
 
 def set_page(p):
@@ -1122,52 +1143,11 @@ with st.sidebar:
 
     )
 
-    # ── 🔑 AI Provider API Keys ──
-    with st.expander("🔑 AI API Keys", expanded=False):
-        st.markdown(
-            "<span style='font-size:0.72rem;color:#90A4AE;'>"
-            "Add keys to enable AI features (disease detection, chatbot, smart recommendations). "
-            "Free providers tried first.</span>",
-            unsafe_allow_html=True,
-        )
-        _ai_engine = get_engine()
-        _provider_labels = {
-            "gemini": ("🟢 Gemini (Free)", "Get free key at ai.google.dev"),
-            "groq":   ("🟢 Groq (Free)",   "Get free key at console.groq.com"),
-            "claude":  ("🔵 Claude",        "Anthropic API key"),
-            "openai":  ("🟣 OpenAI",        "OpenAI API key"),
-            "xai":     ("⚫ Grok/xAI",      "xAI API key"),
-        }
-        for pid, (label, hint) in _provider_labels.items():
-            _skey = f"_ai_key_{pid}"
-            _existing = _ai_engine._keys.get(pid, "")
-            val = st.text_input(label, value=_existing, type="password",
-                                placeholder=hint, key=_skey)
-            if val and val != _existing:
-                _ai_engine.set_key(pid, val)
-            elif not val and _existing:
-                _ai_engine.remove_key(pid)
-
-        _avail = _ai_engine.get_available_providers()
-        if _avail:
-            names = [PROVIDERS[p]["name"] for p in _avail]
-            st.markdown(
-                f"<div style='font-size:0.7rem;color:#81c784;margin-top:4px;'>"
-                f"✅ Active: {', '.join(names)}</div>",
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown(
-                "<div style='font-size:0.7rem;color:#FF9800;margin-top:4px;'>"
-                "⚠️ No AI keys configured — AI features disabled</div>",
-                unsafe_allow_html=True,
-            )
-
     st.markdown(
 
         "<div style='font-size:0.68rem;color:#4caf50;text-align:center;padding-top:4px;'>"
 
-        "Smart Crop Yield AI v4.2 AI-Enhanced<br>Semester Project · Auto-Retrain Enabled</div>",
+        "Smart Crop Yield AI v4.1 ML-Trained<br>Semester Project · Auto-Retrain Enabled</div>",
 
         unsafe_allow_html=True,
 
@@ -1821,33 +1801,6 @@ elif page == "🔮 Predict Yield":
         except Exception:
             st.info("💡 Detailed soil analysis available for: Wheat, Rice, Maize, Cotton, Sugarcane.")
 
-        # ── 🧠 AI Soil Interpretation ──
-        _ai_soil_avail = len(get_engine().get_available_providers()) > 0
-        if _ai_soil_avail:
-            st.markdown("---")
-            st.markdown("#### 🧠 AI Soil Interpretation")
-            with st.spinner("AI is interpreting your soil data…"):
-                _soil_input = {
-                    "nitrogen": nitrogen, "phosphorus": phosphorus,
-                    "potassium": potassium, "ph": ph,
-                    "organic_carbon": 2.5, "soil_type": soil, "crop": crop,
-                    "overall_score": soil_result.get("overall_score", "N/A") if 'soil_result' in locals() else "N/A",
-                    "deficiencies": soil_result.get("deficiencies", []) if 'soil_result' in locals() else [],
-                }
-                _ai_soil_text = ai_soil_interpretation(_soil_input)
-            if _ai_soil_text:
-                st.markdown(
-                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
-                    f"Powered by {get_engine().last_provider or 'AI'}</div>",
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f"<div style='background:rgba(0,150,136,0.06);border:1px solid rgba(0,150,136,0.2);"
-                    f"border-radius:12px;padding:16px 20px;color:#e0e0e0;'>"
-                    f"{_ai_soil_text}</div>",
-                    unsafe_allow_html=True
-                )
-
         # ── 🌾 Crop Suitability Ranking ──
         st.markdown("---")
         st.markdown("#### 🌾 Crop Suitability for Your Soil")
@@ -1918,32 +1871,6 @@ elif page == "🔮 Predict Yield":
                         st.markdown(r)
         except Exception:
             pass
-
-        # ── 🧠 AI-Enhanced Recommendations ──
-        _ai_available_pred = len(get_engine().get_available_providers()) > 0
-        if _ai_available_pred:
-            st.markdown("---")
-            st.markdown("#### 🧠 AI-Enhanced Recommendations")
-            with st.spinner("Generating AI-powered recommendations…"):
-                _soil_d = {"nitrogen": nitrogen, "phosphorus": phosphorus,
-                           "potassium": potassium, "ph": ph, "soil_type": soil}
-                _wx_d = {"temperature": temp, "humidity": hum, "precipitation": rain}
-                _ai_recs_text = ai_smart_recommendations(
-                    crop=crop, soil_data=_soil_d,
-                    weather_data=_wx_d, yield_prediction=result
-                )
-            if _ai_recs_text:
-                st.markdown(
-                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
-                    f"Powered by {get_engine().last_provider or 'AI'}</div>",
-                    unsafe_allow_html=True
-                )
-                st.markdown(
-                    f"<div style='background:rgba(0,150,136,0.06);border:1px solid rgba(0,150,136,0.2);"
-                    f"border-radius:12px;padding:16px 20px;color:#e0e0e0;'>"
-                    f"{_ai_recs_text}</div>",
-                    unsafe_allow_html=True
-                )
 
         # ── Yield Category Badge ──
         try:
@@ -2160,31 +2087,31 @@ elif page == "📷 Image Scanner":
 
                     value=result["health_score"],
 
-                    title={"text": "Crop Health Score", "font": {"color": "#ce93d8", "size": 16}},
+                    title={"text": "Crop Health Score", "font": {"color": "#00E5FF", "size": 16}},
 
                     gauge=dict(
 
-                        axis=dict(range=[0, 100], tickcolor="#ce93d8"),
+                        axis=dict(range=[0, 100], tickcolor="#00E5FF"),
 
-                        bar=dict(color="#ab47bc"),
+                        bar=dict(color="#00E676"),
 
                         steps=[
 
-                            {"range": [0, 35],  "color": "#4a0e0e"},
+                            {"range": [0, 35],  "color": "#1A0000"},
 
-                            {"range": [35, 65], "color": "#4a3800"},
+                            {"range": [35, 65], "color": "#1A1A00"},
 
-                            {"range": [65, 100], "color": "#1b5e20"},
+                            {"range": [65, 100], "color": "#001A0D"},
 
                         ],
 
                     ),
 
-                    number=dict(suffix="%", font=dict(color="#ce93d8")),
+                    number=dict(suffix="%", font=dict(color="#00E5FF")),
 
                 ))
 
-                fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#ce93d8"), height=220,
+                fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", font=dict(color="#00E5FF"), height=220,
 
                                   margin=dict(t=60, b=10))
 
@@ -2451,15 +2378,15 @@ elif page == "📷 Image Scanner":
 
             st.markdown(
 
-                f"<div style='background:rgba(76,175,80,0.10);border:1px solid rgba(76,175,80,0.3);"
+                f"<div style='background:rgba(0, 230, 118, 0.05);border:1px solid rgba(0, 230, 118, 0.3);"
 
-                f"border-radius:14px;padding:18px 22px;margin-bottom:12px;'>"
+                f"border-radius:12px;padding:18px 22px;margin-bottom:12px;box-shadow:inset 0 0 10px rgba(0,230,118,0.1);'>"
 
-                f"<b style='color:#a5d6a7;'>Crop Family:</b> {family} &nbsp;|&nbsp; "
+                f"<b style='color:#00E676;'>Crop Family:</b> {family} &nbsp;|&nbsp; "
 
-                f"<b style='color:#a5d6a7;'>Nutrient Demand:</b> {nut_demand} &nbsp;|&nbsp; "
+                f"<b style='color:#00E676;'>Nutrient Demand:</b> {nut_demand} &nbsp;|&nbsp; "
 
-                f"<b style='color:#a5d6a7;'>Soil Impact:</b> {soil_imp}</div>",
+                f"<b style='color:#00E676;'>Soil Impact:</b> {soil_imp}</div>",
 
                 unsafe_allow_html=True,
 
@@ -2896,111 +2823,6 @@ elif page == "📷 Image Scanner":
                             )
                 except Exception as e:
                     st.warning(f"Disease detection encountered an issue: {e}")
-
-        # ── 🧠 AI Vision Analysis (from ai_engine) ──
-        _ai_available = len(get_engine().get_available_providers()) > 0
-        if _ai_available:
-            st.markdown("---")
-            st.markdown("#### 🧠 AI Vision Analysis")
-            st.markdown(
-                "<div style='background:rgba(0,150,136,0.08);border:1px solid rgba(0,150,136,0.3);"
-                "border-radius:12px;padding:12px 16px;margin-bottom:12px;'>"
-                "<span style='color:#80CBC4;font-size:0.88rem;'>"
-                "Analyzing image with AI vision model…</span></div>",
-                unsafe_allow_html=True
-            )
-            with st.spinner("AI is analyzing your image…"):
-                # AI Disease Detection
-                _ai_crop_hint = result.get("top_crop", None)
-                _ai_dd = ai_detect_disease(img_for_analysis, crop=_ai_crop_hint)
-                # AI Image Analysis
-                _ai_img = ai_analyze_image(img_for_analysis)
-
-            if _ai_dd.get("ai_provider"):
-                st.markdown("##### 🔬 AI Disease Detection")
-                st.markdown(
-                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
-                    f"Powered by {_ai_dd['ai_provider']}</div>",
-                    unsafe_allow_html=True
-                )
-                _ai_d = _ai_dd.get("disease", "Unknown")
-                _ai_c = _ai_dd.get("confidence", 0)
-                _ai_s = _ai_dd.get("severity", "N/A")
-                _ai_color = "#4CAF50" if _ai_d == "Healthy" else "#f44336" if _ai_s in ("Critical","High") else "#FF9800" if _ai_s == "Moderate" else "#8BC34A"
-                st.markdown(
-                    f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:18px;text-align:center;'>"
-                    f"<div style='font-size:1.4rem;font-weight:800;color:{_ai_color};'>{_ai_d}</div>"
-                    f"<div style='font-size:0.85rem;color:#b0bec5;margin-top:4px;'>"
-                    f"Confidence: {_ai_c:.0%} | Severity: {_ai_s}</div></div>",
-                    unsafe_allow_html=True
-                )
-                _ai_desc = _ai_dd.get("description", "")
-                if _ai_desc:
-                    st.markdown(f"<div style='color:#e0e0e0;margin:8px 0;'>{_ai_desc}</div>", unsafe_allow_html=True)
-                _ai_symptoms = _ai_dd.get("symptoms", [])
-                if _ai_symptoms:
-                    st.markdown("**Observed Symptoms:**")
-                    for sym in _ai_symptoms:
-                        st.markdown(f"- {sym}")
-                _ai_recs = _ai_dd.get("recommendations", [])
-                if _ai_recs:
-                    st.markdown("**🩺 AI Treatment Recommendations:**")
-                    for rec in _ai_recs:
-                        st.markdown(
-                            f"<div style='background:rgba(0,150,136,0.06);border-left:3px solid #26A69A;"
-                            f"border-radius:8px;padding:10px 14px;margin:5px 0;color:#e0e0e0;'>{rec}</div>",
-                            unsafe_allow_html=True
-                        )
-
-            if _ai_img.get("ai_provider"):
-                st.markdown("##### 🌿 AI Field Assessment")
-                st.markdown(
-                    f"<div style='font-size:0.72rem;color:#80CBC4;margin-bottom:8px;'>"
-                    f"Powered by {_ai_img['ai_provider']}</div>",
-                    unsafe_allow_html=True
-                )
-                _ai_hs = _ai_img.get("health_score", "?")
-                _ai_hl = _ai_img.get("health_label", "")
-                _ai_yp = _ai_img.get("yield_potential", "?")
-                _ai_ir = _ai_img.get("irrigation_status", "?")
-                ai_c1, ai_c2, ai_c3 = st.columns(3)
-                with ai_c1:
-                    _hs_color = "#4CAF50" if isinstance(_ai_hs, (int,float)) and _ai_hs >= 70 else "#FF9800" if isinstance(_ai_hs, (int,float)) and _ai_hs >= 40 else "#f44336"
-                    st.markdown(
-                        f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;'>"
-                        f"<div style='font-size:2rem;font-weight:800;color:{_hs_color};'>{_ai_hs}</div>"
-                        f"<div style='font-size:0.85rem;color:#b0bec5;'>{_ai_hl}</div>"
-                        f"<div style='font-size:0.75rem;color:#78909C;'>Health Score</div></div>",
-                        unsafe_allow_html=True
-                    )
-                with ai_c2:
-                    st.markdown(
-                        f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;'>"
-                        f"<div style='font-size:1.3rem;font-weight:700;color:#8BC34A;'>{_ai_yp}</div>"
-                        f"<div style='font-size:0.75rem;color:#78909C;margin-top:4px;'>Yield Potential</div></div>",
-                        unsafe_allow_html=True
-                    )
-                with ai_c3:
-                    st.markdown(
-                        f"<div style='background:rgba(0,0,0,0.3);border-radius:14px;padding:16px;text-align:center;'>"
-                        f"<div style='font-size:1.3rem;font-weight:700;color:#29B6F6;'>{_ai_ir}</div>"
-                        f"<div style='font-size:0.75rem;color:#78909C;margin-top:4px;'>Irrigation</div></div>",
-                        unsafe_allow_html=True
-                    )
-                _ai_obs = _ai_img.get("observations", [])
-                if _ai_obs:
-                    st.markdown("**🔍 AI Observations:**")
-                    for ob in _ai_obs:
-                        st.markdown(f"<div style='color:#A5D6A7;margin:3px 0;'>🌱 {ob}</div>", unsafe_allow_html=True)
-                _ai_field_recs = _ai_img.get("recommendations", [])
-                if _ai_field_recs:
-                    st.markdown("**💡 AI Recommendations:**")
-                    for rec in _ai_field_recs:
-                        st.markdown(
-                            f"<div style='background:rgba(0,150,136,0.06);border-left:3px solid #26A69A;"
-                            f"border-radius:8px;padding:10px 14px;margin:5px 0;color:#e0e0e0;'>{rec}</div>",
-                            unsafe_allow_html=True
-                        )
 
         # ── Auto yield prediction from scan ──
 
@@ -3904,94 +3726,3 @@ elif page == "🗄️ Data Explorer":
         fig2.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
 
         st.plotly_chart(fig2, width='stretch')
-
-# ╔══════════════════════════════════════════════════════════════════════════╗ #
-# ║  PAGE 7 – AI CHAT                                                        ║ #
-# ╚══════════════════════════════════════════════════════════════════════════╝ #
-
-elif page == "🤖 AI Chat":
-
-    st.markdown("<div class='section-header'>🤖 AgriBot — AI Farming Assistant</div>",
-                unsafe_allow_html=True)
-
-    _ai_engine_chat = get_engine()
-    _chat_providers = _ai_engine_chat.get_available_providers()
-
-    if not _chat_providers:
-        st.warning(
-            "⚠️ **No AI API keys configured.** "
-            "Please add at least one API key in the sidebar (🔑 AI API Keys) to use the chatbot.\n\n"
-            "**Free options:**\n"
-            "- 🟢 **Gemini** — Get a free key at [ai.google.dev](https://ai.google.dev)\n"
-            "- 🟢 **Groq** — Get a free key at [console.groq.com](https://console.groq.com)"
-        )
-        st.stop()
-
-    # Show active provider
-    _active_names = [PROVIDERS[p]["name"] for p in _chat_providers]
-    st.markdown(
-        f"<div style='font-size:0.78rem;color:#80CBC4;margin-bottom:16px;'>"
-        f"🟢 AI Connected: {_active_names[0]} "
-        f"({'+ ' + str(len(_active_names)-1) + ' fallback(s)' if len(_active_names) > 1 else 'no fallback'})"
-        f"</div>",
-        unsafe_allow_html=True,
-    )
-
-    # Initialize chat history
-    if "ai_chat_history" not in st.session_state:
-        st.session_state.ai_chat_history = []
-
-    # Quick-start topic buttons
-    st.markdown("<div style='margin-bottom:12px;'>", unsafe_allow_html=True)
-    _topics = [
-        ("🌾 Crop Rotation", "What is a good crop rotation plan for rice and wheat in North India?"),
-        ("🐛 Pest Control", "What are common pests for tomato crops and how to control them organically?"),
-        ("💧 Irrigation", "How to decide the right irrigation schedule for sugarcane?"),
-        ("🧪 Soil Health", "How can I improve soil fertility naturally for my farm?"),
-        ("🏛️ Govt Schemes", "What government schemes are available for farmers in India?"),
-        ("🌿 Organic", "How do I start organic farming? What are the first steps?"),
-    ]
-    topic_cols = st.columns(3)
-    for i, (label, question) in enumerate(_topics):
-        with topic_cols[i % 3]:
-            if st.button(label, key=f"topic_{i}", use_container_width=True):
-                st.session_state.ai_chat_history.append({"role": "user", "content": question})
-                with st.spinner("AgriBot is thinking…"):
-                    resp = ai_chat(question, st.session_state.ai_chat_history[:-1])
-                st.session_state.ai_chat_history.append({"role": "assistant", "content": resp})
-                st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    # Display chat history
-    for msg in st.session_state.ai_chat_history:
-        if msg["role"] == "user":
-            st.markdown(
-                f"<div style='background:rgba(33,150,243,0.1);border:1px solid rgba(33,150,243,0.25);"
-                f"border-radius:12px;padding:12px 16px;margin:8px 0;'>"
-                f"<b style='color:#64B5F6;'>🧑‍🌾 You:</b><br>"
-                f"<span style='color:#e0e0e0;'>{msg['content']}</span></div>",
-                unsafe_allow_html=True,
-            )
-        else:
-            st.markdown(
-                f"<div style='background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.25);"
-                f"border-radius:12px;padding:12px 16px;margin:8px 0;'>"
-                f"<b style='color:#81C784;'>🤖 AgriBot:</b><br>"
-                f"<span style='color:#e0e0e0;'>{msg['content']}</span></div>",
-                unsafe_allow_html=True,
-            )
-
-    # Chat input
-    user_input = st.chat_input("Ask AgriBot anything about farming…")
-    if user_input:
-        st.session_state.ai_chat_history.append({"role": "user", "content": user_input})
-        with st.spinner("AgriBot is thinking…"):
-            response = ai_chat(user_input, st.session_state.ai_chat_history[:-1])
-        st.session_state.ai_chat_history.append({"role": "assistant", "content": response})
-        st.rerun()
-
-    # Clear chat button
-    if st.session_state.ai_chat_history:
-        if st.button("🗑️ Clear Chat", key="clear_chat"):
-            st.session_state.ai_chat_history = []
-            st.rerun()

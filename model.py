@@ -275,11 +275,11 @@ def get_model_info(name: str) -> dict:
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ #
 #  Auto-Retrain Tracker                                                         #
-#  Retrains when: (1) 5+ app opens since last train, (2) new dataset detected, #
+#  Retrains when: (1) 25+ app opens since last train, (2) new dataset detected, #
 #                 (3) running on a different PC / hostname                       #
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ #
 TRACKER_FILE = os.path.join(MODEL_DIR, "retrain_tracker.json")
-RETRAIN_INTERVAL = 5  # retrain every N app opens
+RETRAIN_INTERVAL = 25  # retrain every N app opens
 
 
 def _get_machine_id() -> str:
