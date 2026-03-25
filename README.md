@@ -142,6 +142,8 @@ pip install -r requirements.txt
 
 # Run the app
 streamlit run app.py
+#or
+.\.venv\Scripts\python.exe -m streamlit run app.py
 ```
 
 The app will open at `http://localhost:8501`
